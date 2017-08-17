@@ -266,6 +266,7 @@ function WarMenu.CloseMenu()
             setMenuVisible(currentMenu, false)
             debugPrint(tostring(currentMenu)..' menu closed')
             PlaySoundFrontend(-1, "QUIT", "HUD_FRONTEND_DEFAULT_SOUNDSET", true)
+            optionCount = 0
             currentMenu = nil
         else
             menus[currentMenu].aboutToBeClosed = true
