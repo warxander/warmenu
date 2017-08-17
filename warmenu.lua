@@ -1,4 +1,4 @@
---WarMenu version 0.9.5
+--WarMenu version 0.9.6
 
 WarMenu = { }
 
