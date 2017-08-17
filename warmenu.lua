@@ -177,6 +177,8 @@ function WarMenu.CreateMenu(id, title)
 
     menus[id].previousMenu = nil
 
+    menus[id].aboutToBeClosed = false
+
     -- Top left corner
     menus[id].x = 0.0175
     menus[id].y = 0.025
@@ -248,14 +250,27 @@ function WarMenu.IsMenuOpened(id)
 end
 
 
+function WarMenu.IsMenuAboutToBeClosed()
+    if menus[currentMenu] then
+        return menus[currentMenu].aboutToBeClosed
+    else
+        return false
+    end
+end
+
+
 function WarMenu.CloseMenu()
     if menus[currentMenu] then
-        setMenuVisible(currentMenu, false)
-        debugPrint(tostring(currentMenu)..' menu closed')
-        PlaySoundFrontend(-1, "QUIT", "HUD_FRONTEND_DEFAULT_SOUNDSET", true)
-        currentMenu = nil
-    else
-        debugPrint('Failed to close '..tostring(currentMenu)..' menu: it doesn\'t exist')
+        if menus[currentMenu].aboutToBeClosed then
+            menus[currentMenu].aboutToBeClosed = false
+            setMenuVisible(currentMenu, false)
+            debugPrint(tostring(currentMenu)..' menu closed')
+            PlaySoundFrontend(-1, "QUIT", "HUD_FRONTEND_DEFAULT_SOUNDSET", true)
+            currentMenu = nil
+        else
+            menus[currentMenu].aboutToBeClosed = true
+            debugPrint(tostring(currentMenu)..' menu about to be closed')
+        end
     end
 end
 
@@ -356,45 +371,49 @@ end
 
 function WarMenu.Display()
     if isMenuVisible(currentMenu) then
-        ClearAllHelpMessages()
+        if menus[currentMenu].aboutToBeClosed then
+            WarMenu.CloseMenu()
+        else
+            ClearAllHelpMessages()
 
-        drawTitle()
-        drawSubTitle()
+            drawTitle()
+            drawSubTitle()
 
-        currentKey = nil
+            currentKey = nil
 
-        if IsControlJustPressed(0, keys.down) then
-            PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", true)
+            if IsControlJustPressed(0, keys.down) then
+                PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", true)
 
-            if menus[currentMenu].currentOption < optionCount then
-                menus[currentMenu].currentOption = menus[currentMenu].currentOption + 1
-            else
-                menus[currentMenu].currentOption = 1
+                if menus[currentMenu].currentOption < optionCount then
+                    menus[currentMenu].currentOption = menus[currentMenu].currentOption + 1
+                else
+                    menus[currentMenu].currentOption = 1
+                end
+            elseif IsControlJustPressed(0, keys.up) then
+                PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", true)
+
+                if menus[currentMenu].currentOption > 1 then
+                    menus[currentMenu].currentOption = menus[currentMenu].currentOption - 1
+                else
+                    menus[currentMenu].currentOption = optionCount
+                end
+            elseif IsControlJustPressed(0, keys.left) then
+                currentKey = keys.left
+            elseif IsControlJustPressed(0, keys.right) then
+                currentKey = keys.right
+            elseif IsControlJustPressed(0, keys.select) then
+                currentKey = keys.select
+            elseif IsControlJustPressed(0, keys.back) then
+                if menus[menus[currentMenu].previousMenu] then
+                    PlaySoundFrontend(-1, "BACK", "HUD_FRONTEND_DEFAULT_SOUNDSET", true)
+                    setMenuVisible(menus[currentMenu].previousMenu, true)
+                else
+                    WarMenu.CloseMenu()
+                end
             end
-        elseif IsControlJustPressed(0, keys.up) then
-            PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", true)
 
-            if menus[currentMenu].currentOption > 1 then
-                menus[currentMenu].currentOption = menus[currentMenu].currentOption - 1
-            else
-                menus[currentMenu].currentOption = optionCount
-            end
-        elseif IsControlJustPressed(0, keys.left) then
-            currentKey = keys.left
-        elseif IsControlJustPressed(0, keys.right) then
-            currentKey = keys.right
-        elseif IsControlJustPressed(0, keys.select) then
-            currentKey = keys.select
-        elseif IsControlJustPressed(0, keys.back) then
-            if menus[menus[currentMenu].previousMenu] then
-                PlaySoundFrontend(-1, "BACK", "HUD_FRONTEND_DEFAULT_SOUNDSET", true)
-                setMenuVisible(menus[currentMenu].previousMenu, true)
-            else
-                WarMenu.CloseMenu()
-            end
+            optionCount = 0
         end
-
-        optionCount = 0
     end
 end
 
