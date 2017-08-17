@@ -293,11 +293,13 @@ end
 
 
 function WarMenu.MenuButton(text, id)
-    if WarMenu.Button(text) and menus[id] then
-        setMenuVisible(currentMenu, false)
-        setMenuVisible(id, true, true)
+    if menus[id] then
+        if WarMenu.Button(text) then
+            setMenuVisible(currentMenu, false)
+            setMenuVisible(id, true, true)
 
-        return true
+            return true
+        end
     else
         debugPrint('Failed to create '..tostring(text)..' menu button: '..tostring(id)..' submenu doesn\'t exist')
     end
