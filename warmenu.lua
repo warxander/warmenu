@@ -439,13 +439,13 @@ function WarMenu.SetMenuMaxOptionCountOnScreen(id, count)
 end
 
 
-function WarMenu.SetTitleColor(id, r, g, b)
-    setMenuProperty(id, 'titleColor', { ['r'] = r, ['g'] = g, ['b'] = b, ['a'] = menus[id].titleColor.a })
+function WarMenu.SetTitleColor(id, r, g, b, a)
+    setMenuProperty(id, 'titleColor', { ['r'] = r, ['g'] = g, ['b'] = b, ['a'] = a })
 end
-
-
-function WarMenu.SetTitleBackgroundColor(id, r, g, b)
-    setMenuProperty(id, 'titleBackgroundColor', { ['r'] = r, ['g'] = g, ['b'] = b, ['a'] = menus[id].titleBackgroundColor.a })
+ 
+ 
+function WarMenu.SetTitleBackgroundColor(id, r, g, b, a)
+    setMenuProperty(id, 'titleBackgroundColor', { ['r'] = r, ['g'] = g, ['b'] = b, ['a'] = a })
 end
 
 
