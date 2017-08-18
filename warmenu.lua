@@ -208,7 +208,7 @@ function WarMenu.CreateSubMenu(id, parent, subTitle)
         WarMenu.CreateMenu(id, menus[parent].title)
 
         -- Well it's copy constructor like :)
-        setMenuProperty(id, 'subTitle', string.upper(subTitle))
+        setMenuProperty(id, 'subTitle', string.upper(menus[parent].subTitle))
         setMenuProperty(id, 'previousMenu', parent)
 
         setMenuProperty(id, 'x', menus[parent].x)
