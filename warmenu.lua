@@ -120,11 +120,13 @@ local function drawSubTitle()
         local x = menus[currentMenu].x + menuWidth / 2
         local y = menus[currentMenu].y + titleHeight + buttonHeight / 2
 
+        local subTitleColor = { r = menus[currentMenu].titleBackgroundColor.r, g = menus[currentMenu].titleBackgroundColor.g, b = menus[currentMenu].titleBackgroundColor.b, a = 255 }
+
         drawRect(x, y, menuWidth, buttonHeight, menus[currentMenu].subTitleBackgroundColor)
-        drawText(menus[currentMenu].subTitle, menus[currentMenu].x + buttonTextXOffset, y - buttonHeight / 2 + buttonTextYOffset, buttonFont, menus[currentMenu].titleBackgroundColor, buttonScale, false)
+        drawText(menus[currentMenu].subTitle, menus[currentMenu].x + buttonTextXOffset, y - buttonHeight / 2 + buttonTextYOffset, buttonFont, subTitleColor, buttonScale, false)
 
         if optionCount > menus[currentMenu].maxOptionCount then
-            drawText(tostring(menus[currentMenu].currentOption)..' / '..tostring(optionCount), menus[currentMenu].x + menuWidth, y - buttonHeight / 2 + buttonTextYOffset, buttonFont, menus[currentMenu].titleBackgroundColor, buttonScale, false, false, true)
+            drawText(tostring(menus[currentMenu].currentOption)..' / '..tostring(optionCount), menus[currentMenu].x + menuWidth, y - buttonHeight / 2 + buttonTextYOffset, buttonFont, subTitleColor, buttonScale, false, false, true)
         end
     end
 end
