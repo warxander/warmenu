@@ -273,6 +273,7 @@ function WarMenu.CloseMenu()
             PlaySoundFrontend(-1, "QUIT", "HUD_FRONTEND_DEFAULT_SOUNDSET", true)
             optionCount = 0
             currentMenu = nil
+            currentKey = nil
         else
             menus[currentMenu].aboutToBeClosed = true
             debugPrint(tostring(currentMenu)..' menu about to be closed')
