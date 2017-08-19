@@ -144,14 +144,17 @@ local function drawButton(text, subText)
         local y = menus[currentMenu].y + titleHeight + buttonHeight + (buttonHeight * multiplier) - buttonHeight / 2
         local backgroundColor = nil
         local textColor = nil
+        local subTextColor = nil
         local shadow = false
 
         if menus[currentMenu].currentOption == optionCount then
             backgroundColor = menus[currentMenu].menuFocusBackgroundColor
             textColor = menus[currentMenu].menuFocusTextColor
+            subTextColor = menus[currentMenu].menuFocusTextColor
         else
             backgroundColor = menus[currentMenu].menuBackgroundColor
             textColor = menus[currentMenu].menuTextColor
+            subTextColor = menus[currentMenu].menuSubTextColor
             shadow = true
         end
 
@@ -159,7 +162,7 @@ local function drawButton(text, subText)
         drawText(text, menus[currentMenu].x + buttonTextXOffset, y - (buttonHeight / 2) + buttonTextYOffset, buttonFont, textColor, buttonScale, false, shadow)
 
         if subText then
-            drawText(subText, menus[currentMenu].x + buttonTextXOffset, y - buttonHeight / 2 + buttonTextYOffset, buttonFont, textColor, buttonScale, false, shadow, true)
+            drawText(subText, menus[currentMenu].x + buttonTextXOffset, y - buttonHeight / 2 + buttonTextYOffset, buttonFont, subTextColor, buttonScale, false, shadow, true)
         end
     end
 end
@@ -191,6 +194,7 @@ function WarMenu.CreateMenu(id, title)
     menus[id].titleBackgroundColor = { r = 245, g = 127, b = 23, a = 255 }
 
     menus[id].menuTextColor = { r = 255, g = 255, b = 255, a = 255 }
+    menus[id].menuSubTextColor = { r = 255, g = 255, b = 255, a = 255 }
     menus[id].menuFocusTextColor = { r = 0, g = 0, b = 0, a = 255 }
     menus[id].menuFocusBackgroundColor = { r = 245, g = 245, b = 245, a = 255 }
     menus[id].menuBackgroundColor = { r = 0, g = 0, b = 0, a = 160 }
@@ -223,6 +227,7 @@ function WarMenu.CreateSubMenu(id, parent, subTitle)
         setMenuProperty(id, 'titleColor', menus[parent].titleColor)
         setMenuProperty(id, 'titleBackgroundColor', menus[parent].titleBackgroundColor)
         setMenuProperty(id, 'menuTextColor', menus[parent].menuTextColor)
+        setMenuProperty(id, 'menuSubTextColor', menus[parent].menuSubTextColor)
         setMenuProperty(id, 'menuFocusTextColor', menus[parent].menuFocusTextColor)
         setMenuProperty(id, 'menuFocusBackgroundColor', menus[parent].menuFocusBackgroundColor)
         setMenuProperty(id, 'menuBackgroundColor', menus[parent].menuBackgroundColor)
@@ -469,6 +474,9 @@ function WarMenu.SetMenuTextColor(id, r, g, b, a)
     setMenuProperty(id, 'menuTextColor', { ['r'] = r, ['g'] = g, ['b'] = b, ['a'] = a or menus[id].menuTextColor.a })
 end
 
+function WarMenu.SetMenuSubTextColor(id, r, g, b, a)
+    setMenuProperty(id, 'menuSubTextColor', { ['r'] = r, ['g'] = g, ['b'] = b, ['a'] = a or menus[id].menuSubTextColor.a })
+end
 
 function WarMenu.SetMenuFocusColor(id, r, g, b, a)
     setMenuProperty(id, 'menuFocusColor', { ['r'] = r, ['g'] = g, ['b'] = b, ['a'] = a or menus[id].menuFocusColor.a })
