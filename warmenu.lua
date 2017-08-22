@@ -173,7 +173,7 @@ local function drawButton(text, textureDictMain, textureNameMain, subText, textu
                 Citizen.Wait(0)
             end
 
-            DrawSprite(textureDictMain, textureNameMain, menus[currentMenu].x + buttonTextXOffset, y - (buttonHeight / 2) + buttonTextYOffset, 0.025, 0.04, 0.0, textColor.r, textColor.g, textColor.b, textColor.a)
+            DrawSprite(textureDictMain, textureNameMain, menus[currentMenu].x + (buttonTextXOffset + 0.01), y - (buttonHeight / 2) + (buttonTextYOffset + 0.015), 0.025, 0.04, 0.0, textColor.r, textColor.g, textColor.b, textColor.a)
         else
             drawText(text, menus[currentMenu].x + buttonTextXOffset, y - (buttonHeight / 2) + buttonTextYOffset, buttonFont, textColor, buttonScale, false, shadow)
         end
@@ -186,7 +186,7 @@ local function drawButton(text, textureDictMain, textureNameMain, subText, textu
                     Citizen.Wait(0)
                 end
 
-                DrawSprite(textureDictSub, textureNameSub, menus[currentMenu].x + (menuWidth - buttonTextXOffset - menus[currentMenu].x), y - buttonHeight / 2 + (menus[currentMenu].y - buttonTextXOffset), 0.04, 0.05, 0.0, textColor.r, textColor.g, textColor.b, textColor.a)
+                DrawSprite(textureDictSub, textureNameSub, menus[currentMenu].x + (menuWidth - 0.03) + (buttonTextXOffset + 0.01), y - (buttonHeight / 2) + (buttonTextXOffset + 0.014), 0.025, 0.04, 0.0, subTextColor.r, subTextColor.g, subTextColor.b, subTextColor.a)
             else
                 drawText(subText, menus[currentMenu].x + buttonTextXOffset, y - buttonHeight / 2 + buttonTextYOffset, buttonFont, subTextColor, buttonScale, false, shadow, true)
             end
