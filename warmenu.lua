@@ -131,8 +131,12 @@ local function drawSubTitle()
     end
 end
 
+local function drawButton(text, textureDictMain, textureNameMain, subText, textureDictSub, textureNameSub)
+    textureDictMain = textureDictMain or "commonmenu"
+    textureNameMain = textureNameMain or "shop_tick_icon"
+    textureDictSub = textureDictSub or "commonmenu"
+    textureNameSub = textureNameSub or "shop_tick_icon"
 
-local function drawButton(text, subText)
     local x = menus[currentMenu].x + menuWidth / 2
     local multiplier = nil
 
@@ -161,14 +165,34 @@ local function drawButton(text, subText)
         end
 
         drawRect(x, y, menuWidth, buttonHeight, backgroundColor)
-        drawText(text, menus[currentMenu].x + buttonTextXOffset, y - (buttonHeight / 2) + buttonTextYOffset, buttonFont, textColor, buttonScale, false, shadow)
+
+        if (text == "*_SPRITE_*") then
+            while (not HasStreamedTextureDictLoaded(textureDictMain)) do
+                RequestStreamedTextureDict(textureDictMain, true)
+
+                Citizen.Wait(0)
+            end
+
+            DrawSprite(textureDictMain, textureNameMain, menus[currentMenu].x + buttonTextXOffset, y - (buttonHeight / 2) + buttonTextYOffset, 0.025, 0.04, 0.0, textColor.r, textColor.g, textColor.b, textColor.a)
+        else
+            drawText(text, menus[currentMenu].x + buttonTextXOffset, y - (buttonHeight / 2) + buttonTextYOffset, buttonFont, textColor, buttonScale, false, shadow)
+        end
 
         if subText then
-            drawText(subText, menus[currentMenu].x + buttonTextXOffset, y - buttonHeight / 2 + buttonTextYOffset, buttonFont, subTextColor, buttonScale, false, shadow, true)
+            if (subText == "*_SPRITE_*") then
+                while (not HasStreamedTextureDictLoaded(textureDictSub)) do
+                    RequestStreamedTextureDict(textureDictSub, true)
+
+                    Citizen.Wait(0)
+                end
+
+                DrawSprite(textureDictSub, textureNameSub, menus[currentMenu].x + (menuWidth - buttonTextXOffset - menus[currentMenu].x), y - buttonHeight / 2 + (menus[currentMenu].y - buttonTextXOffset), 0.04, 0.05, 0.0, textColor.r, textColor.g, textColor.b, textColor.a)
+            else
+                drawText(subText, menus[currentMenu].x + buttonTextXOffset, y - buttonHeight / 2 + buttonTextYOffset, buttonFont, subTextColor, buttonScale, false, shadow, true)
+            end
         end
     end
 end
-
 
 -- API
 
@@ -289,7 +313,12 @@ function WarMenu.CloseMenu()
 end
 
 
-function WarMenu.Button(text, subText)
+function WarMenu.Button(text, textureDictMain, textureNameMain, subText, textureDictSub, textureNameSub)
+    textureDictMain = textureDictMain or "commonmenu"
+    textureNameMain = textureNameMain or "shop_tick_icon"
+    textureDictSub = textureDictSub or "commonmenu"
+    textureNameSub = textureNameSub or "shop_tick_icon"
+    
     local buttonText = text
     if subText then
         buttonText = '{ '..tostring(buttonText)..', '..tostring(subText)..' }'
@@ -300,7 +329,7 @@ function WarMenu.Button(text, subText)
 
         local isCurrent = menus[currentMenu].currentOption == optionCount
 
-        drawButton(text, subText)
+        drawButton(text, textureDictMain, textureNameMain, subText, textureDictSub, textureNameSub)
 
         if isCurrent then
             if currentKey == keys.select then
@@ -338,12 +367,17 @@ end
 
 
 function WarMenu.CheckBox(text, bool, callback)
-    local checked = 'Off'
+    local checkedTexture = "shop_tick_icon"
+    local uncheckedTexture = "shop_box_blank"
+
+    local currentTexture = uncheckedTexture
+    --local checked = 'Off'
     if bool then
-        checked = 'On'
+        currentTexture = checkedTexture
+        --checked = 'On'
     end
 
-    if WarMenu.Button(text, checked) then
+    if WarMenu.Button(text, false, false, "*_SPRITE_*", "commonmenu", currentTexture) then
         bool = not bool
         debugPrint(tostring(text)..' checkbox changed to '..tostring(bool))
         callback(bool)
@@ -364,7 +398,7 @@ function WarMenu.ComboBox(text, items, currentIndex, selectedIndex, callback)
         selectedItem = '← '..tostring(selectedItem)..' →'
     end
 
-    if WarMenu.Button(text, selectedItem) then
+    if WarMenu.Button(text, false, false, selectedItem) then
         selectedIndex = currentIndex
         callback(currentIndex, selectedIndex)
         return true
