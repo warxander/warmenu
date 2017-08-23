@@ -131,12 +131,7 @@ local function drawSubTitle()
     end
 end
 
-local function drawButton(text, textureDictMain, textureNameMain, subText, textureDictSub, textureNameSub)
-    textureDictMain = textureDictMain or "commonmenu"
-    textureNameMain = textureNameMain or "shop_tick_icon"
-    textureDictSub = textureDictSub or "commonmenu"
-    textureNameSub = textureNameSub or "shop_tick_icon"
-
+local function drawButton(text, subText)
     local x = menus[currentMenu].x + menuWidth / 2
     local multiplier = nil
 
@@ -166,29 +161,29 @@ local function drawButton(text, textureDictMain, textureNameMain, subText, textu
 
         drawRect(x, y, menuWidth, buttonHeight, backgroundColor)
 
-        if (text == "*_SPRITE_*") then
-            while (not HasStreamedTextureDictLoaded(textureDictMain)) do
-                RequestStreamedTextureDict(textureDictMain, true)
+        if (type(text) == "table") then
+            while (not HasStreamedTextureDictLoaded(text["textureDict"])) do
+                RequestStreamedTextureDict(text["textureDict"], true)
 
                 Citizen.Wait(0)
             end
 
-            DrawSprite(textureDictMain, textureNameMain, menus[currentMenu].x + (buttonTextXOffset + 0.01), y - (buttonHeight / 2) + (buttonTextYOffset + 0.015), 0.025, 0.04, 0.0, textColor.r, textColor.g, textColor.b, textColor.a)
+            DrawSprite(text["textureDict"], text["textureName"], menus[currentMenu].x + (buttonTextXOffset + 0.01), y - (buttonHeight / 2) + (buttonTextYOffset + 0.015), 0.025, 0.04, 0.0, textColor.r, textColor.g, textColor.b, textColor.a)
         else
-            drawText(text, menus[currentMenu].x + buttonTextXOffset, y - (buttonHeight / 2) + buttonTextYOffset, buttonFont, textColor, buttonScale, false, shadow)
+            drawText(tostring(text), menus[currentMenu].x + buttonTextXOffset, y - (buttonHeight / 2) + buttonTextYOffset, buttonFont, textColor, buttonScale, false, shadow)
         end
 
         if subText then
-            if (subText == "*_SPRITE_*") then
-                while (not HasStreamedTextureDictLoaded(textureDictSub)) do
-                    RequestStreamedTextureDict(textureDictSub, true)
+            if (type(subText) == "table") then
+                while (not HasStreamedTextureDictLoaded(subText["textureDict"])) do
+                    RequestStreamedTextureDict(subText["textureDict"], true)
 
                     Citizen.Wait(0)
                 end
 
-                DrawSprite(textureDictSub, textureNameSub, menus[currentMenu].x + (menuWidth - 0.03) + (buttonTextXOffset + 0.01), y - (buttonHeight / 2) + (buttonTextXOffset + 0.014), 0.025, 0.04, 0.0, subTextColor.r, subTextColor.g, subTextColor.b, subTextColor.a)
+                DrawSprite(subText["textureDict"], subText["textureName"], menus[currentMenu].x + (menuWidth - 0.025) + (buttonTextXOffset + 0.01), y - (buttonHeight / 2) + (buttonTextXOffset + 0.014), 0.025, 0.04, 0.0, subTextColor.r, subTextColor.g, subTextColor.b, subTextColor.a)
             else
-                drawText(subText, menus[currentMenu].x + buttonTextXOffset, y - buttonHeight / 2 + buttonTextYOffset, buttonFont, subTextColor, buttonScale, false, shadow, true)
+                drawText(tostring(subText), menus[currentMenu].x + buttonTextXOffset, y - buttonHeight / 2 + buttonTextYOffset, buttonFont, subTextColor, buttonScale, false, shadow, true)
             end
         end
     end
@@ -209,8 +204,8 @@ function WarMenu.CreateMenu(id, title)
     menus[id].aboutToBeClosed = false
 
     -- Top left corner
-    menus[id].x = 0.0175
-    menus[id].y = 0.025
+    menus[id].x = 0.35 -- 0.0175
+    menus[id].y = 0.35 -- 0.025
 
     menus[id].currentOption = 1
     menus[id].maxOptionCount = 10
@@ -313,12 +308,7 @@ function WarMenu.CloseMenu()
 end
 
 
-function WarMenu.Button(text, textureDictMain, textureNameMain, subText, textureDictSub, textureNameSub)
-    textureDictMain = textureDictMain or "commonmenu"
-    textureNameMain = textureNameMain or "shop_tick_icon"
-    textureDictSub = textureDictSub or "commonmenu"
-    textureNameSub = textureNameSub or "shop_tick_icon"
-    
+function WarMenu.Button(text, subText) 
     local buttonText = text
     if subText then
         buttonText = '{ '..tostring(buttonText)..', '..tostring(subText)..' }'
@@ -329,7 +319,7 @@ function WarMenu.Button(text, textureDictMain, textureNameMain, subText, texture
 
         local isCurrent = menus[currentMenu].currentOption == optionCount
 
-        drawButton(text, textureDictMain, textureNameMain, subText, textureDictSub, textureNameSub)
+        drawButton(text, subText)
 
         if isCurrent then
             if currentKey == keys.select then
@@ -377,7 +367,7 @@ function WarMenu.CheckBox(text, bool, callback)
         --checked = 'On'
     end
 
-    if WarMenu.Button(text, false, false, "*_SPRITE_*", "commonmenu", currentTexture) then
+    if WarMenu.Button(text, {["textureDict"] = "commonmenu", ["textureName"] = currentTexture}) then
         bool = not bool
         debugPrint(tostring(text)..' checkbox changed to '..tostring(bool))
         callback(bool)
