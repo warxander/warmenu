@@ -262,6 +262,15 @@ function WarMenu.IsMenuOpened(id)
 end
 
 
+function WarMenu.IsAnyMenuOpened()
+    for id, _ in pairs(menus) do
+        if isMenuVisible(id) then return true end
+    end
+
+    return false
+end
+
+
 function WarMenu.IsMenuAboutToBeClosed()
     if menus[currentMenu] then
         return menus[currentMenu].aboutToBeClosed
