@@ -1,25 +1,16 @@
---WarMenu version 0.9.7
-
 WarMenu = { }
 
--- Options
 WarMenu.debug = false
 
 
-
--- Local variables
 local menus = { }
 local keys = { up = 172, down = 173, left = 174, right = 175, select = 176, back = 177 }
-
 local optionCount = 0
 
 local currentKey = nil
-
 local currentMenu = nil
 
-
 local menuWidth = 0.23
-
 local titleHeight = 0.11
 local titleYOffset = 0.03
 local titleScale = 1.0
@@ -31,7 +22,6 @@ local buttonTextXOffset = 0.005
 local buttonTextYOffset = 0.005
 
 
--- Local functions=
 local function debugPrint(text)
 	if WarMenu.debug then
 		Citizen.Trace('[WarMenu] '..tostring(text))
@@ -177,8 +167,6 @@ local function drawButton(text, subText)
 end
 
 
--- API
-
 function WarMenu.CreateMenu(id, title)
 	-- Default settings
 	menus[id] = { }
@@ -191,7 +179,6 @@ function WarMenu.CreateMenu(id, title)
 
 	menus[id].aboutToBeClosed = false
 
-	-- Top left corner
 	menus[id].x = 0.0175
 	menus[id].y = 0.025
 
@@ -221,7 +208,6 @@ function WarMenu.CreateSubMenu(id, parent, subTitle)
 	if menus[parent] then
 		WarMenu.CreateMenu(id, menus[parent].title)
 
-		-- Well it's copy constructor like :)
 		if subTitle then
 			setMenuProperty(id, 'subTitle', string.upper(subTitle))
 		else
@@ -243,7 +229,6 @@ function WarMenu.CreateSubMenu(id, parent, subTitle)
 		setMenuProperty(id, 'menuFocusBackgroundColor', menus[parent].menuFocusBackgroundColor)
 		setMenuProperty(id, 'menuBackgroundColor', menus[parent].menuBackgroundColor)
 		setMenuProperty(id, 'subTitleBackgroundColor', menus[parent].subTitleBackgroundColor)
-		-- :(
 	else
 		debugPrint('Failed to create '..tostring(id)..' submenu: '..tostring(parent)..' parent menu doesn\'t exist')
 	end
