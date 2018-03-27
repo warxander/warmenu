@@ -109,7 +109,13 @@ local function drawTitle()
         local x = menus[currentMenu].x + menuWidth / 2
         local y = menus[currentMenu].y + titleHeight / 2
 
-        drawRect(x, y, menuWidth, titleHeight, menus[currentMenu].titleBackgroundColor)
+        if menus[currentMenu].titleBackgroundSprite then
+            RequestStreamedTextureDict(menus[currentMenu].titleBackgroundSprite.dict, false)
+            while not HasStreamedTextureDictLoaded(menus[currentMenu].titleBackgroundSprite.dict) do Citizen.Wait(0) end
+            DrawSprite(menus[currentMenu].titleBackgroundSprite.dict, menus[currentMenu].titleBackgroundSprite.name, x, y, menuWidth, titleHeight, 0., 255, 255, 255, 255)
+        else
+            drawRect(x, y, menuWidth, titleHeight, menus[currentMenu].titleBackgroundColor)
+        end
         drawText(menus[currentMenu].title, x, y - titleHeight / 2 + titleYOffset, menus[currentMenu].titleFont, menus[currentMenu].titleColor, titleScale, true)
     end
 end
@@ -194,6 +200,7 @@ function WarMenu.CreateMenu(id, title)
     menus[id].titleFont = 1
     menus[id].titleColor = { r = 0, g = 0, b = 0, a = 255 }
     menus[id].titleBackgroundColor = { r = 245, g = 127, b = 23, a = 255 }
+    menus[id].titleBackgroundSprite = nil
 
     menus[id].menuTextColor = { r = 255, g = 255, b = 255, a = 255 }
     menus[id].menuSubTextColor = { r = 189, g = 189, b = 189, a = 255 }
@@ -228,6 +235,7 @@ function WarMenu.CreateSubMenu(id, parent, subTitle)
         setMenuProperty(id, 'titleFont', menus[parent].titleFont)
         setMenuProperty(id, 'titleColor', menus[parent].titleColor)
         setMenuProperty(id, 'titleBackgroundColor', menus[parent].titleBackgroundColor)
+        setMenuProperty(id, 'titleBackgroundSprite', menus[parent].titleBackgroundSprite)
         setMenuProperty(id, 'menuTextColor', menus[parent].menuTextColor)
         setMenuProperty(id, 'menuSubTextColor', menus[parent].menuSubTextColor)
         setMenuProperty(id, 'menuFocusTextColor', menus[parent].menuFocusTextColor)
@@ -468,6 +476,11 @@ end
  
 function WarMenu.SetTitleBackgroundColor(id, r, g, b, a)
     setMenuProperty(id, 'titleBackgroundColor', { ['r'] = r, ['g'] = g, ['b'] = b, ['a'] = a or menus[id].titleBackgroundColor.a })
+end
+
+
+function WarMenu.SetTitleBackgroundSprite(id, textureDict, textureName)
+    setMenuProperty(id, 'titleBackgroundSprite', { dict = textureDict, name = textureName })
 end
 
 
