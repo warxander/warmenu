@@ -100,8 +100,6 @@ local function drawTitle()
 		local y = menus[currentMenu].y + titleHeight / 2
 
 		if menus[currentMenu].titleBackgroundSprite then
-			RequestStreamedTextureDict(menus[currentMenu].titleBackgroundSprite.dict, false)
-			while not HasStreamedTextureDictLoaded(menus[currentMenu].titleBackgroundSprite.dict) do Citizen.Wait(0) end
 			DrawSprite(menus[currentMenu].titleBackgroundSprite.dict, menus[currentMenu].titleBackgroundSprite.name, x, y, menuWidth, titleHeight, 0., 255, 255, 255, 255)
 		else
 			drawRect(x, y, menuWidth, titleHeight, menus[currentMenu].titleBackgroundColor)
@@ -244,6 +242,12 @@ function WarMenu.OpenMenu(id)
 	if id and menus[id] then
 		PlaySoundFrontend(-1, "SELECT", "HUD_FRONTEND_DEFAULT_SOUNDSET", true)
 		setMenuVisible(id, true)
+
+		if menus[id].titleBackgroundSprite then
+			RequestStreamedTextureDict(menus[id].titleBackgroundSprite.dict, false)
+			while not HasStreamedTextureDictLoaded(menus[id].titleBackgroundSprite.dict) do Citizen.Wait(0) end
+		end
+
 		debugPrint(tostring(id)..' menu opened')
 	else
 		debugPrint('Failed to open '..tostring(id)..' menu: it doesn\'t exist')
