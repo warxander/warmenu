@@ -242,12 +242,6 @@ function WarMenu.OpenMenu(id)
 	if id and menus[id] then
 		PlaySoundFrontend(-1, "SELECT", "HUD_FRONTEND_DEFAULT_SOUNDSET", true)
 		setMenuVisible(id, true)
-
-		if menus[id].titleBackgroundSprite then
-			RequestStreamedTextureDict(menus[id].titleBackgroundSprite.dict, false)
-			while not HasStreamedTextureDictLoaded(menus[id].titleBackgroundSprite.dict) do Citizen.Wait(0) end
-		end
-
 		debugPrint(tostring(id)..' menu opened')
 	else
 		debugPrint('Failed to open '..tostring(id)..' menu: it doesn\'t exist')
@@ -470,6 +464,7 @@ end
 
 
 function WarMenu.SetTitleBackgroundSprite(id, textureDict, textureName)
+	RequestStreamedTextureDict(textureDict)
 	setMenuProperty(id, 'titleBackgroundSprite', { dict = textureDict, name = textureName })
 end
 
