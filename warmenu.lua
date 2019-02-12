@@ -10,7 +10,6 @@ local optionCount = 0
 local currentKey = nil
 local currentMenu = nil
 
-local menuWidth = 0.23
 local titleHeight = 0.11
 local titleYOffset = 0.03
 local titleScale = 1.0
@@ -78,7 +77,7 @@ local function drawText(text, x, y, font, color, scale, center, shadow, alignRig
 		if center then
 			SetTextCentre(center)
 		elseif alignRight then
-			SetTextWrap(menus[currentMenu].x, menus[currentMenu].x + menuWidth - buttonTextXOffset)
+			SetTextWrap(menus[currentMenu].x, menus[currentMenu].x + menus[currentMenu].width - buttonTextXOffset)
 			SetTextRightJustify(true)
 		end
 	end
@@ -96,13 +95,13 @@ end
 
 local function drawTitle()
 	if menus[currentMenu] then
-		local x = menus[currentMenu].x + menuWidth / 2
+		local x = menus[currentMenu].x + menus[currentMenu].width / 2
 		local y = menus[currentMenu].y + titleHeight / 2
 
 		if menus[currentMenu].titleBackgroundSprite then
-			DrawSprite(menus[currentMenu].titleBackgroundSprite.dict, menus[currentMenu].titleBackgroundSprite.name, x, y, menuWidth, titleHeight, 0., 255, 255, 255, 255)
+			DrawSprite(menus[currentMenu].titleBackgroundSprite.dict, menus[currentMenu].titleBackgroundSprite.name, x, y, menus[currentMenu].width, titleHeight, 0., 255, 255, 255, 255)
 		else
-			drawRect(x, y, menuWidth, titleHeight, menus[currentMenu].titleBackgroundColor)
+			drawRect(x, y, menus[currentMenu].width, titleHeight, menus[currentMenu].titleBackgroundColor)
 		end
 
 		drawText(menus[currentMenu].title, x, y - titleHeight / 2 + titleYOffset, menus[currentMenu].titleFont, menus[currentMenu].titleColor, titleScale, true)
@@ -112,23 +111,23 @@ end
 
 local function drawSubTitle()
 	if menus[currentMenu] then
-		local x = menus[currentMenu].x + menuWidth / 2
+		local x = menus[currentMenu].x + menus[currentMenu].width / 2
 		local y = menus[currentMenu].y + titleHeight + buttonHeight / 2
 
 		local subTitleColor = { r = menus[currentMenu].titleBackgroundColor.r, g = menus[currentMenu].titleBackgroundColor.g, b = menus[currentMenu].titleBackgroundColor.b, a = 255 }
 
-		drawRect(x, y, menuWidth, buttonHeight, menus[currentMenu].subTitleBackgroundColor)
+		drawRect(x, y, menus[currentMenu].width, buttonHeight, menus[currentMenu].subTitleBackgroundColor)
 		drawText(menus[currentMenu].subTitle, menus[currentMenu].x + buttonTextXOffset, y - buttonHeight / 2 + buttonTextYOffset, buttonFont, subTitleColor, buttonScale, false)
 
 		if optionCount > menus[currentMenu].maxOptionCount then
-			drawText(tostring(menus[currentMenu].currentOption)..' / '..tostring(optionCount), menus[currentMenu].x + menuWidth, y - buttonHeight / 2 + buttonTextYOffset, buttonFont, subTitleColor, buttonScale, false, false, true)
+			drawText(tostring(menus[currentMenu].currentOption)..' / '..tostring(optionCount), menus[currentMenu].x + menus[currentMenu].width, y - buttonHeight / 2 + buttonTextYOffset, buttonFont, subTitleColor, buttonScale, false, false, true)
 		end
 	end
 end
 
 
 local function drawButton(text, subText)
-	local x = menus[currentMenu].x + menuWidth / 2
+	local x = menus[currentMenu].x + menus[currentMenu].width / 2
 	local multiplier = nil
 
 	if menus[currentMenu].currentOption <= menus[currentMenu].maxOptionCount and optionCount <= menus[currentMenu].maxOptionCount then
@@ -155,7 +154,7 @@ local function drawButton(text, subText)
 			shadow = true
 		end
 
-		drawRect(x, y, menuWidth, buttonHeight, backgroundColor)
+		drawRect(x, y, menus[currentMenu].width, buttonHeight, backgroundColor)
 		drawText(text, menus[currentMenu].x + buttonTextXOffset, y - (buttonHeight / 2) + buttonTextYOffset, buttonFont, textColor, buttonScale, false, shadow)
 
 		if subText then
@@ -179,6 +178,7 @@ function WarMenu.CreateMenu(id, title)
 
 	menus[id].x = 0.0175
 	menus[id].y = 0.025
+	menus[id].width = 0.23
 
 	menus[id].currentOption = 1
 	menus[id].maxOptionCount = 10
