@@ -338,16 +338,11 @@ function WarMenu.MenuButton(text, id)
 end
 
 
-function WarMenu.CheckBox(text, bool, callback)
-	local checked = 'Off'
-	if bool then
-		checked = 'On'
-	end
-
-	if WarMenu.Button(text, checked) then
-		bool = not bool
-		debugPrint(tostring(text)..' checkbox changed to '..tostring(bool))
-		callback(bool)
+function WarMenu.CheckBox(text, checked, callback)
+	if WarMenu.Button(text, checked and 'On' or 'Off') then
+		checked = not checked
+		debugPrint(tostring(text)..' checkbox changed to '..tostring(checked))
+		if callback then callback(checked) end
 
 		return true
 	end

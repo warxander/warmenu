@@ -26,10 +26,9 @@ Citizen.CreateThread(function()
 
 	while true do
 		if WarMenu.IsMenuOpened('test') then
-			if WarMenu.CheckBox('Checkbox', checkbox, function(checked)
-					checkbox = checked
-				end) then
-					-- Do your stuff here
+			if WarMenu.CheckBox('Checkbox', checkbox) then
+				checkbox = not checkbox
+				-- Do your stuff here
 			elseif WarMenu.ComboBox('Combobox', items, currentItemIndex, selectedItemIndex, function(currentIndex, selectedIndex)
 					currentItemIndex = currentIndex
 					selectedItemIndex = selectedIndex
