@@ -391,7 +391,7 @@ function WarMenu.Display()
 
 			currentKey = nil
 
-			if IsControlJustPressed(0, keys.down) then
+			if IsControlJustReleased(1, keys.down) then
 				PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", true)
 
 				if menus[currentMenu].currentOption < optionCount then
@@ -399,7 +399,7 @@ function WarMenu.Display()
 				else
 					menus[currentMenu].currentOption = 1
 				end
-			elseif IsControlJustPressed(0, keys.up) then
+			elseif IsControlJustReleased(1, keys.up) then
 				PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", true)
 
 				if menus[currentMenu].currentOption > 1 then
@@ -407,13 +407,13 @@ function WarMenu.Display()
 				else
 					menus[currentMenu].currentOption = optionCount
 				end
-			elseif IsControlJustPressed(0, keys.left) then
+			elseif IsControlJustReleased(1, keys.left) then
 				currentKey = keys.left
-			elseif IsControlJustPressed(0, keys.right) then
+			elseif IsControlJustReleased(1, keys.right) then
 				currentKey = keys.right
-			elseif IsControlJustPressed(0, keys.select) then
+			elseif IsControlJustReleased(1, keys.select) then
 				currentKey = keys.select
-			elseif IsControlJustPressed(0, keys.back) then
+			elseif IsControlJustReleased(1, keys.back) then
 				if menus[menus[currentMenu].previousMenu] then
 					PlaySoundFrontend(-1, "BACK", "HUD_FRONTEND_DEFAULT_SOUNDSET", true)
 					setMenuVisible(menus[currentMenu].previousMenu, true)
