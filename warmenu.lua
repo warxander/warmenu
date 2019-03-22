@@ -448,6 +448,11 @@ function WarMenu.SetMenuMaxOptionCountOnScreen(id, count)
 end
 
 
+function WarMenu.SetTitle(id, title)
+	setMenuProperty(id, 'title', title)
+end
+
+
 function WarMenu.SetTitleColor(id, r, g, b, a)
 	setMenuProperty(id, 'titleColor', { ['r'] = r, ['g'] = g, ['b'] = b, ['a'] = a or menus[id].titleColor.a })
 end
