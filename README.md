@@ -16,7 +16,7 @@ Use it as separate resource and add `client_script '@warmenu/warmenu.lua'` in yo
 ## Usage
 ```lua
 Citizen.CreateThread(function()
-	local items = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" }
+	local items = { 'Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5' }
 	local currentItemIndex = 1
 	local selectedItemIndex = 1
 	local checkbox = true
@@ -73,8 +73,8 @@ WarMenu.IsMenuAboutToBeClosed() -- return true if current menu will be closed in
 WarMenu.CloseMenu()
 
 -- Controls return true if activated
-WarMenu.Button(text) 
-WarMenu.MenuButton(text, id)
+WarMenu.Button(text, subText)
+WarMenu.MenuButton(text, id, subText)
 WarMenu.CheckBox(text, bool, callback)
 WarMenu.ComboBox(text, items, currentIndex, selectedIndex, callback)
 -- Use them in loop to draw
@@ -88,6 +88,7 @@ WarMenu.SetMenuX(id, x) -- [0.0..1.0] top left corner
 WarMenu.SetMenuY(id, y) -- [0.0..1.0] top
 WarMenu.SetMenuMaxOptionCountOnScreen(id, count) -- 10 by default
 
+WarMenu.SetTitle(id, title)
 WarMenu.SetTitleColor(id, r, g, b, a)
 WarMenu.SetTitleBackgroundColor(id, r, g, b, a)
 -- or
@@ -105,6 +106,10 @@ WarMenu.SetMenuButtonPressedSound(id, name, set) -- https://pastebin.com/0neZdsZ
 
 
 ## Changelog
+### 0.9.9
+* Added new `WarMenu.SetTitle()` API
+* Added `WarMenu.MenuButton` subText optional parameter
+* Updated manifest format
 ### 0.9.8
 * Added new `WarMenu.IsAnyMenuOpened()` API
 * Added new `WarMenu.SetTitleBackgroundSprite()` API

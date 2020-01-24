@@ -322,9 +322,9 @@ function WarMenu.Button(text, subText)
 end
 
 
-function WarMenu.MenuButton(text, id)
+function WarMenu.MenuButton(text, id, subText)
 	if menus[id] then
-		if WarMenu.Button(text) then
+		if WarMenu.Button(text, subText) then
 			setMenuVisible(currentMenu, false)
 			setMenuVisible(id, true, true)
 
@@ -456,8 +456,8 @@ end
 function WarMenu.SetTitleColor(id, r, g, b, a)
 	setMenuProperty(id, 'titleColor', { ['r'] = r, ['g'] = g, ['b'] = b, ['a'] = a or menus[id].titleColor.a })
 end
- 
- 
+
+
 function WarMenu.SetTitleBackgroundColor(id, r, g, b, a)
 	setMenuProperty(id, 'titleBackgroundColor', { ['r'] = r, ['g'] = g, ['b'] = b, ['a'] = a or menus[id].titleBackgroundColor.a })
 end
