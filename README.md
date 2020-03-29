@@ -39,6 +39,9 @@ Citizen.CreateThread(function()
 			elseif WarMenu.MenuButton('Exit', 'closeMenu') then
 			end
 
+			-- Always check current option AFTER drawing all controls and BEFORE WarMenu.Display() function call
+			Citizen.Trace(WarMenu.CurrentOption())
+
 			WarMenu.Display()
 		elseif WarMenu.IsMenuOpened('closeMenu') then
 			if WarMenu.Button('Yes') then
@@ -59,12 +62,13 @@ end)
 
 ## API
 ```lua
-WarMenu.debug = bool --false by default
+WarMenu.debug = bool -- false by default
 
 WarMenu.CreateMenu(id, title)
 WarMenu.CreateSubMenu(id, parent, subTitle)
 
 WarMenu.CurrentMenu() -- id
+WarMenu.CurrentOption() -- current index (>= 1) or nil
 
 WarMenu.OpenMenu(id)
 WarMenu.IsMenuOpened(id)
@@ -106,6 +110,8 @@ WarMenu.SetMenuButtonPressedSound(id, name, set) -- https://pastebin.com/0neZdsZ
 
 
 ## Changelog
+### 0.9.10
+* Added new `WarMenu.CurrentOption()` API
 ### 0.9.9
 * Added new `WarMenu.SetTitle()` API
 * Added `WarMenu.MenuButton` subText optional parameter

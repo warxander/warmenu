@@ -428,6 +428,15 @@ function WarMenu.Display()
 end
 
 
+function WarMenu.CurrentOption()
+	if currentMenu and optionCount ~= 0 and menus[currentMenu] then
+		return menus[currentMenu].currentOption
+	end
+
+	return nil
+end
+
+
 function WarMenu.SetMenuWidth(id, width)
 	setMenuProperty(id, 'width', width)
 end
