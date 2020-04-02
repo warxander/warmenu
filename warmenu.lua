@@ -83,7 +83,7 @@ local function drawText(text, x, y, font, color, scale, center, shadow, alignRig
 	end
 
 	BeginTextCommandDisplayText("STRING")
-	AddTextComponentSubstringPlayerName(text)
+	AddTextComponentSubstringPlayerName(tostring(text))
 	EndTextCommandDisplayText(x, y)
 end
 
