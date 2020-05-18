@@ -389,7 +389,12 @@ end
 
 function WarMenu.Display()
 	if isMenuVisible(currentMenu) then
-		DisableAllControlActions(0)
+		DisableControlAction(0, keys.left, true)
+		DisableControlAction(0, keys.up, true)
+		DisableControlAction(0, keys.down, true)
+		DisableControlAction(0, keys.right, true)
+		DisableControlAction(0, keys.back, true)
+		DisableControlAction(0, keys.select, true)
 
 		local menu = menus[currentMenu]
 
