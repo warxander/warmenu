@@ -4,7 +4,7 @@ WarMenu.debug = false
 
 
 local menus = { }
-local keys = { up = 172, down = 173, left = 174, right = 175, select = 176, back = 177 }
+local keys = { up = 188, down = 187, left = 189, right = 190, select = 201, back = 202 }
 local optionCount = 0
 
 local currentKey = nil
@@ -401,7 +401,7 @@ function WarMenu.Display()
 
 			currentKey = nil
 
-			if IsControlJustReleased(1, keys.down) then
+			if IsDisabledControlJustReleased(0, keys.down) then
 				PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", true)
 
 				if menu.currentOption < optionCount then
@@ -409,7 +409,7 @@ function WarMenu.Display()
 				else
 					menu.currentOption = 1
 				end
-			elseif IsControlJustReleased(1, keys.up) then
+			elseif IsDisabledControlJustReleased(0, keys.up) then
 				PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", true)
 
 				if menu.currentOption > 1 then
@@ -417,13 +417,13 @@ function WarMenu.Display()
 				else
 					menu.currentOption = optionCount
 				end
-			elseif IsControlJustReleased(1, keys.left) then
+			elseif IsDisabledControlJustReleased(0, keys.left) then
 				currentKey = keys.left
-			elseif IsControlJustReleased(1, keys.right) then
+			elseif IsDisabledControlJustReleased(0, keys.right) then
 				currentKey = keys.right
-			elseif IsControlJustReleased(1, keys.select) then
+			elseif IsDisabledControlJustReleased(0, keys.select) then
 				currentKey = keys.select
-			elseif IsControlJustReleased(1, keys.back) then
+			elseif IsDisabledControlJustReleased(0, keys.back) then
 				if menus[menu.previousMenu] then
 					PlaySoundFrontend(-1, "BACK", "HUD_FRONTEND_DEFAULT_SOUNDSET", true)
 					setMenuVisible(menu.previousMenu, true)
