@@ -4,8 +4,13 @@ WarMenu.debug = false
 
 
 local menus = { }
-local keys = { up = 188, down = 187, left = 189, right = 190, select = 201, back = 202 }
+local keys = { up = 188, down = 187, left = 189, right = 190, select = 201, back = 202, scrollDown = 180, scrollUp = 181 }
 local optionCount = 0
+
+local keyRepeatTime = 170
+local scrollRepeatTime = 120
+local lastKeyTime = 0
+local keyDownTime = 0
 
 local currentKey = nil
 local currentMenu = nil
@@ -395,6 +400,9 @@ function WarMenu.Display()
 		DisableControlAction(0, keys.right, true)
 		DisableControlAction(0, keys.back, true)
 		DisableControlAction(0, keys.select, true)
+		DisableControlAction(0, keys.scrollDown, true)
+		DisableControlAction(0, keys.scrollUp, true)
+		HideHudComponentThisFrame(19) -- Disable the weapon wheel while the menu is displayed
 
 		local menu = menus[currentMenu]
 
@@ -407,35 +415,66 @@ function WarMenu.Display()
 			drawSubTitle()
 
 			currentKey = nil
-
-			if IsDisabledControlJustReleased(0, keys.down) then
-				PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", true)
-
-				if menu.currentOption < optionCount then
-					menu.currentOption = menu.currentOption + 1
-				else
-					menu.currentOption = 1
+			local currentKeyTime = GetGameTimer()
+			local elapsedKeyTme = currentKeyTime - lastKeyTime
+			local canRepeat = false
+			
+			if IsDisabledControlPressed(0, keys.scrollDown) or IsDisabledControlPressed(0, keys.scrollup) then
+				if elapsedKeyTme > scrollRepeatTime then
+					canRepeat = true
 				end
-			elseif IsDisabledControlJustReleased(0, keys.up) then
-				PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", true)
-
-				if menu.currentOption > 1 then
-					menu.currentOption = menu.currentOption - 1
-				else
-					menu.currentOption = optionCount
+			else
+				if elapsedKeyTme > keyRepeatTime then
+					canRepeat = true
 				end
-			elseif IsDisabledControlJustReleased(0, keys.left) then
-				currentKey = keys.left
-			elseif IsDisabledControlJustReleased(0, keys.right) then
-				currentKey = keys.right
+			end
+
+			if IsDisabledControlPressed(0, keys.down) or IsDisabledControlPressed(0, keys.scrollDown) then
+				if canRepeat or IsDisabledControlPressed(0, keys.scrollDown) then
+					lastKeyTime = currentKeyTime
+					PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", true)
+
+					if menu.currentOption < optionCount then
+						menu.currentOption = menu.currentOption + 1
+					else
+						menu.currentOption = 1
+					end
+				end
+			elseif IsDisabledControlPressed(0, keys.up) or IsDisabledControlPressed(0, keys.scrollUp) then
+				if canRepeat or IsDisabledControlPressed(0, keys.scrollUp) then
+					lastKeyTime = currentKeyTime
+					PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", true)
+
+					if menu.currentOption > 1 then
+						menu.currentOption = menu.currentOption - 1
+					else
+						menu.currentOption = optionCount
+					end
+				end
+			elseif IsDisabledControlPressed(0, keys.left) then
+				if canRepeat then
+					lastKeyTime = currentKeyTime
+					currentKey = keys.left
+				end
+			elseif IsDisabledControlPressed(0, keys.right) then
+				if canRepeat then
+					lastKeyTime = currentKeyTime
+					currentKey = keys.right
+				end
 			elseif IsDisabledControlJustReleased(0, keys.select) then
-				currentKey = keys.select
+				if canRepeat then
+					lastKeyTime = currentKeyTime
+					currentKey = keys.select
+				end
 			elseif IsDisabledControlJustReleased(0, keys.back) then
-				if menus[menu.previousMenu] then
-					PlaySoundFrontend(-1, "BACK", "HUD_FRONTEND_DEFAULT_SOUNDSET", true)
-					setMenuVisible(menu.previousMenu, true)
-				else
-					WarMenu.CloseMenu()
+				if canRepeat then
+					lastKeyTime = currentKeyTime
+					if menus[menu.previousMenu] then
+						PlaySoundFrontend(-1, "BACK", "HUD_FRONTEND_DEFAULT_SOUNDSET", true)
+						setMenuVisible(menu.previousMenu, true)
+					else
+						WarMenu.CloseMenu()
+					end
 				end
 			end
 
