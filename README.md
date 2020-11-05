@@ -54,6 +54,8 @@ Citizen.CreateThread(function()
 
 			WarMenu.Display()
 		end
+
+		Citizen.Wait(0)
 	end
 end)
 ```
