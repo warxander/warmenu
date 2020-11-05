@@ -3,7 +3,6 @@ WarMenu.__index = WarMenu
 
 WarMenu.debug = false
 
-
 local menus = { }
 local keys = { up = 188, down = 187, left = 189, right = 190, select = 201, back = 202 }
 local optionCount = 0
@@ -21,13 +20,11 @@ local buttonScale = 0.365
 local buttonTextXOffset = 0.005
 local buttonTextYOffset = 0.005
 
-
 local function debugPrint(text)
 	if WarMenu.debug then
 		Citizen.Trace('[WarMenu] '..tostring(text))
 	end
 end
-
 
 local function setMenuProperty(id, property, value)
 	if id and menus[id] then
@@ -36,7 +33,6 @@ local function setMenuProperty(id, property, value)
 	end
 end
 
-
 local function isMenuVisible(id)
 	if id and menus[id] then
 		return menus[id].visible
@@ -44,7 +40,6 @@ local function isMenuVisible(id)
 		return false
 	end
 end
-
 
 local function setMenuVisible(id, visible, holdCurrent)
 	if id and menus[id] then
@@ -63,7 +58,6 @@ local function setMenuVisible(id, visible, holdCurrent)
 		end
 	end
 end
-
 
 local function drawText(text, x, y, font, color, scale, center, shadow, alignRight)
 	SetTextColour(color[1], color[2], color[3], color[4] or 255)
@@ -89,11 +83,9 @@ local function drawText(text, x, y, font, color, scale, center, shadow, alignRig
 	EndTextCommandDisplayText(x, y)
 end
 
-
 local function drawRect(x, y, width, height, color)
 	DrawRect(x, y, width, height, color[1], color[2], color[3], color[4] or 255)
 end
-
 
 local function drawTitle()
 	local menu = menus[currentMenu]
@@ -111,7 +103,6 @@ local function drawTitle()
 	end
 end
 
-
 local function drawSubTitle()
 	local menu = menus[currentMenu]
 	if menu then
@@ -126,7 +117,6 @@ local function drawSubTitle()
 		end
 	end
 end
-
 
 local function drawButton(text, subText)
 	local menu = menus[currentMenu]
@@ -167,7 +157,6 @@ local function drawButton(text, subText)
 	end
 end
 
-
 function WarMenu.CreateMenu(id, title)
 	-- Default settings
 	menus[id] = { }
@@ -204,7 +193,6 @@ function WarMenu.CreateMenu(id, title)
 	debugPrint(tostring(id)..' menu created')
 end
 
-
 function WarMenu.CreateSubMenu(id, parent, subTitle)
 	if menus[parent] then
 		WarMenu.CreateMenu(id, menus[parent].title)
@@ -235,11 +223,9 @@ function WarMenu.CreateSubMenu(id, parent, subTitle)
 	end
 end
 
-
 function WarMenu.CurrentMenu()
 	return currentMenu
 end
-
 
 function WarMenu.OpenMenu(id)
 	if id and menus[id] then
@@ -251,11 +237,9 @@ function WarMenu.OpenMenu(id)
 	end
 end
 
-
 function WarMenu.IsMenuOpened(id)
 	return isMenuVisible(id)
 end
-
 
 function WarMenu.IsAnyMenuOpened()
 	for id, _ in pairs(menus) do
@@ -265,7 +249,6 @@ function WarMenu.IsAnyMenuOpened()
 	return false
 end
 
-
 function WarMenu.IsMenuAboutToBeClosed()
 	local menu = menus[currentMenu]
 	if menu then
@@ -274,7 +257,6 @@ function WarMenu.IsMenuAboutToBeClosed()
 		return false
 	end
 end
-
 
 function WarMenu.CloseMenu()
 	local menu = menus[currentMenu]
@@ -293,7 +275,6 @@ function WarMenu.CloseMenu()
 		end
 	end
 end
-
 
 function WarMenu.Button(text, subText)
 	local buttonText = text
@@ -327,7 +308,6 @@ function WarMenu.Button(text, subText)
 	end
 end
 
-
 function WarMenu.MenuButton(text, id, subText)
 	if menus[id] then
 		if WarMenu.Button(text, subText) then
@@ -343,7 +323,6 @@ function WarMenu.MenuButton(text, id, subText)
 	return false
 end
 
-
 function WarMenu.CheckBox(text, checked, callback)
 	if WarMenu.Button(text, checked and 'On' or 'Off') then
 		checked = not checked
@@ -355,7 +334,6 @@ function WarMenu.CheckBox(text, checked, callback)
 
 	return false
 end
-
 
 function WarMenu.ComboBox(text, items, currentIndex, selectedIndex, callback)
 	local itemsCount = #items
@@ -383,7 +361,6 @@ function WarMenu.ComboBox(text, items, currentIndex, selectedIndex, callback)
 	callback(currentIndex, selectedIndex)
 	return false
 end
-
 
 function WarMenu.Display()
 	if isMenuVisible(currentMenu) then
@@ -442,7 +419,6 @@ function WarMenu.Display()
 	end
 end
 
-
 function WarMenu.CurrentOption()
 	if currentMenu and optionCount ~= 0 and menus[currentMenu] then
 		return menus[currentMenu].currentOption
@@ -451,44 +427,36 @@ function WarMenu.CurrentOption()
 	return nil
 end
 
-
 function WarMenu.SetMenuWidth(id, width)
 	setMenuProperty(id, 'width', width)
 end
-
 
 function WarMenu.SetMenuX(id, x)
 	setMenuProperty(id, 'x', x)
 end
 
-
 function WarMenu.SetMenuY(id, y)
 	setMenuProperty(id, 'y', y)
 end
 
-
 function WarMenu.SetMenuMaxOptionCountOnScreen(id, count)
 	setMenuProperty(id, 'maxOptionCount', count)
 end
-
 
 function WarMenu.SetTitle(id, title)
 	setMenuProperty(id, 'title', title)
 end
 WarMenu.SetMenuTitle = WarMenu.SetTitle
 
-
 function WarMenu.SetTitleColor(id, r, g, b, a)
 	setMenuProperty(id, 'titleColor', { r, g, b, a or menus[id].titleColor[4] })
 end
 WarMenu.SetMenuTitleColor = WarMenu.SetTitleColor
 
-
 function WarMenu.SetTitleBackgroundColor(id, r, g, b, a)
 	setMenuProperty(id, 'titleBackgroundColor', { r, g, b, a or menus[id].titleBackgroundColor[4] })
 end
 WarMenu.SetMenuTitleBackgroundColor = WarMenu.SetTitleBackgroundColor
-
 
 function WarMenu.SetTitleBackgroundSprite(id, textureDict, textureName)
 	RequestStreamedTextureDict(textureDict)
@@ -501,11 +469,9 @@ function WarMenu.SetSubTitle(id, text)
 end
 WarMenu.SetMenuSubTitle = WarMenu.SetSubTitle
 
-
 function WarMenu.SetMenuBackgroundColor(id, r, g, b, a)
 	setMenuProperty(id, 'backgroundColor', { r, g, b, a or menus[id].backgroundColor[4] })
 end
-
 
 function WarMenu.SetMenuTextColor(id, r, g, b, a)
 	setMenuProperty(id, 'textColor', { r, g, b, a or menus[id].textColor[4] })
@@ -519,7 +485,6 @@ function WarMenu.SetMenuFocusColor(id, r, g, b, a)
 	setMenuProperty(id, 'menuFocusColor', { r, g, b, a or menus[id].menuFocusColor[4] })
 end
 
-
 function WarMenu.SetMenuButtonPressedSound(id, name, set)
-	setMenuProperty(id, 'buttonPressedSound', { ['name'] = name, ['set'] = set })
+	setMenuProperty(id, 'buttonPressedSound', { name = name, set = set })
 end
