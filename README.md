@@ -1,9 +1,11 @@
 # WarMenu
-Fork of @MrDaGree  [GUI Management (Maker) | Mod Menu Style Menus (uhh.. ya)](https://forum.fivem.net/t/release-gui-management-maker-mod-menu-style-menus-uhh-ya)
+Inspired by @MrDaGree  [GUI Management (Maker) | Mod Menu Style Menus (uhh.. ya)](https://forum.fivem.net/t/release-gui-management-maker-mod-menu-style-menus-uhh-ya)
 
 
 ## How to Install
-Use it as separate resource and add `client_script '@warmenu/warmenu.lua'` in your `__resource.lua`
+1. Place it to `/resources` folder
+2. Add `ensure warmenu` to your `server.cfg`
+3. Add `client_script '@warmenu/warmenu.lua'` to your `fxmanifest.lua`
 
 
 ## Features
@@ -111,6 +113,18 @@ WarMenu.SetMenuButtonPressedSound(id, name, set) -- https://pastebin.com/0neZdsZ
 
 
 ## Changelog
+### 0.9.15
+* Improved performance and memory consumption
+* Added proper debug getter/setter API
+* Improved API consistency
+### 0.9.14
+* Improved button mapping
+* Improved controller support
+### 0.9.12
+* Introduced significant performance boost
+From `~0.4 ms` to `~0.02 ms` ( **~20x times faster!** )
+### 0.9.11
+* Fixed drawing numbers as button text
 ### 0.9.10
 * Added new `WarMenu.CurrentOption()` API
 ### 0.9.9
