@@ -60,26 +60,24 @@ local function setMenuVisible(id, visible, holdCurrent)
 end
 
 local function drawText(text, x, y, font, color, scale, center, shadow, alignRight)
-	SetTextColour(color[1], color[2], color[3], color[4] or 255)
 	SetTextFont(font)
+	SetTextColour(color[1], color[2], color[3], color[4] or 255)
 	SetTextScale(scale, scale)
 
 	if shadow then
-		SetTextDropShadow(2, 2, 0, 0, 0)
+		SetTextDropShadow()
 	end
 
-	local menu = menus[currentMenu]
-	if menu then
-		if center then
-			SetTextCentre(center)
-		elseif alignRight then
-			SetTextWrap(menu.x, menu.x + menu.width - buttonTextXOffset)
-			SetTextRightJustify(true)
-		end
+	if center then
+		SetTextCentre(center)
+	elseif alignRight then
+		local menu = menus[currentMenu]
+		SetTextRightJustify(true)
+		SetTextWrap(menu.x, menu.x + menu.width - buttonTextXOffset)
 	end
 
 	BeginTextCommandDisplayText('STRING')
-	AddTextComponentSubstringPlayerName(tostring(text))
+	AddTextComponentString(tostring(text))
 	EndTextCommandDisplayText(x, y)
 end
 
