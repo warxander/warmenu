@@ -148,13 +148,13 @@ local function drawButton(text, subText)
 		local shadow = false
 
 		if menu.currentOption == optionCount then
-			backgroundColor = menu.menuFocusBackgroundColor
-			textColor = menu.menuFocusTextColor
-			subTextColor = menu.menuFocusTextColor
+			backgroundColor = menu.focusBackgroundColor
+			textColor = menu.focusTextColor
+			subTextColor = menu.focusTextColor
 		else
-			backgroundColor = menu.menuBackgroundColor
-			textColor = menu.menuTextColor
-			subTextColor = menu.menuSubTextColor
+			backgroundColor = menu.backgroundColor
+			textColor = menu.textColor
+			subTextColor = menu.subTextColor
 			shadow = true
 		end
 
@@ -192,11 +192,11 @@ function WarMenu.CreateMenu(id, title)
 	menus[id].titleBackgroundColor = { 245, 127, 23, 255 }
 	menus[id].titleBackgroundSprite = nil
 
-	menus[id].menuTextColor = { 255, 255, 255, 255 }
-	menus[id].menuSubTextColor = { 189, 189, 189, 255 }
-	menus[id].menuFocusTextColor = { 0, 0, 0, 255 }
-	menus[id].menuFocusBackgroundColor = { 245, 245, 245, 255 }
-	menus[id].menuBackgroundColor = { 0, 0, 0, 255 }
+	menus[id].textColor = { 255, 255, 255, 255 }
+	menus[id].subTextColor = { 189, 189, 189, 255 }
+	menus[id].focusTextColor = { 0, 0, 0, 255 }
+	menus[id].focusBackgroundColor = { 245, 245, 245, 255 }
+	menus[id].backgroundColor = { 0, 0, 0, 255 }
 	menus[id].subTitleBackgroundColor = { 0, 0, 0, 255 }
 
 	menus[id].buttonPressedSound = { name = "SELECT", set = "HUD_FRONTEND_DEFAULT_SOUNDSET" } --https://pastebin.com/0neZdsZ5
@@ -224,11 +224,11 @@ function WarMenu.CreateSubMenu(id, parent, subTitle)
 		setMenuProperty(id, 'titleColor', menus[parent].titleColor)
 		setMenuProperty(id, 'titleBackgroundColor', menus[parent].titleBackgroundColor)
 		setMenuProperty(id, 'titleBackgroundSprite', menus[parent].titleBackgroundSprite)
-		setMenuProperty(id, 'menuTextColor', menus[parent].menuTextColor)
-		setMenuProperty(id, 'menuSubTextColor', menus[parent].menuSubTextColor)
-		setMenuProperty(id, 'menuFocusTextColor', menus[parent].menuFocusTextColor)
-		setMenuProperty(id, 'menuFocusBackgroundColor', menus[parent].menuFocusBackgroundColor)
-		setMenuProperty(id, 'menuBackgroundColor', menus[parent].menuBackgroundColor)
+		setMenuProperty(id, 'textColor', menus[parent].textColor)
+		setMenuProperty(id, 'subTextColor', menus[parent].subTextColor)
+		setMenuProperty(id, 'focusTextColor', menus[parent].focusTextColor)
+		setMenuProperty(id, 'focusBackgroundColor', menus[parent].focusBackgroundColor)
+		setMenuProperty(id, 'backgroundColor', menus[parent].backgroundColor)
 		setMenuProperty(id, 'subTitleBackgroundColor', menus[parent].subTitleBackgroundColor)
 	else
 		debugPrint('Failed to create '..tostring(id)..' submenu: '..tostring(parent)..' parent menu doesn\'t exist')
@@ -503,16 +503,16 @@ WarMenu.SetMenuSubTitle = WarMenu.SetSubTitle
 
 
 function WarMenu.SetMenuBackgroundColor(id, r, g, b, a)
-	setMenuProperty(id, 'menuBackgroundColor', { r, g, b, a or menus[id].menuBackgroundColor[4] })
+	setMenuProperty(id, 'backgroundColor', { r, g, b, a or menus[id].backgroundColor[4] })
 end
 
 
 function WarMenu.SetMenuTextColor(id, r, g, b, a)
-	setMenuProperty(id, 'menuTextColor', { r, g, b, a or menus[id].menuTextColor[4] })
+	setMenuProperty(id, 'textColor', { r, g, b, a or menus[id].textColor[4] })
 end
 
 function WarMenu.SetMenuSubTextColor(id, r, g, b, a)
-	setMenuProperty(id, 'menuSubTextColor', { r, g, b, a or menus[id].menuSubTextColor[4] })
+	setMenuProperty(id, 'subTextColor', { r, g, b, a or menus[id].subTextColor[4] })
 end
 
 function WarMenu.SetMenuFocusColor(id, r, g, b, a)
