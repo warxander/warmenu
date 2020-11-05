@@ -1,4 +1,5 @@
 WarMenu = { }
+WarMenu.__index = WarMenu
 
 WarMenu.debug = false
 
@@ -477,27 +478,31 @@ end
 function WarMenu.SetTitle(id, title)
 	setMenuProperty(id, 'title', title)
 end
+WarMenu.SetMenuTitle = WarMenu.SetTitle
 
 
 function WarMenu.SetTitleColor(id, r, g, b, a)
 	setMenuProperty(id, 'titleColor', { ['r'] = r, ['g'] = g, ['b'] = b, ['a'] = a or menus[id].titleColor.a })
 end
+WarMenu.SetMenuTitleColor = WarMenu.SetTitleColor
 
 
 function WarMenu.SetTitleBackgroundColor(id, r, g, b, a)
 	setMenuProperty(id, 'titleBackgroundColor', { ['r'] = r, ['g'] = g, ['b'] = b, ['a'] = a or menus[id].titleBackgroundColor.a })
 end
+WarMenu.SetMenuTitleBackgroundColor = WarMenu.SetTitleBackgroundColor
 
 
 function WarMenu.SetTitleBackgroundSprite(id, textureDict, textureName)
 	RequestStreamedTextureDict(textureDict)
 	setMenuProperty(id, 'titleBackgroundSprite', { dict = textureDict, name = textureName })
 end
-
+WarMenu.SetMenuTitleBackgroundSprite = WarMenu.SetTitleBackgroundSprite
 
 function WarMenu.SetSubTitle(id, text)
 	setMenuProperty(id, 'subTitle', string.upper(text))
 end
+WarMenu.SetMenuSubTitle = WarMenu.SetSubTitle
 
 
 function WarMenu.SetMenuBackgroundColor(id, r, g, b, a)

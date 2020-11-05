@@ -92,13 +92,13 @@ WarMenu.SetMenuX(id, x) -- [0.0..1.0] top left corner
 WarMenu.SetMenuY(id, y) -- [0.0..1.0] top
 WarMenu.SetMenuMaxOptionCountOnScreen(id, count) -- 10 by default
 
-WarMenu.SetTitle(id, title)
-WarMenu.SetTitleColor(id, r, g, b, a)
-WarMenu.SetTitleBackgroundColor(id, r, g, b, a)
+WarMenu.SetMenuTitle(id, title)
+WarMenu.SetMenuTitleColor(id, r, g, b, a)
+WarMenu.SetMenuTitleBackgroundColor(id, r, g, b, a)
 -- or
-WarMenu.SetTitleBackgroundSprite(id, textureDict, textureName)
+WarMenu.SetMenuTitleBackgroundSprite(id, textureDict, textureName)
 
-WarMenu.SetSubTitle(id, text) -- it will uppercase automatically
+WarMenu.SetMenuSubTitle(id, text) -- it will uppercase automatically
 
 WarMenu.SetMenuBackgroundColor(id, r, g, b, a)
 WarMenu.SetMenuTextColor(id, r, g, b, a)
