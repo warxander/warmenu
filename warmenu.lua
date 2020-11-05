@@ -436,6 +436,18 @@ function WarMenu.CurrentOption()
 	return nil
 end
 
+function WarMenu.IsItemHovered()
+	if not currentMenu or optionCount == 0 then
+		return false
+	end
+
+	return menus[currentMenu].currentOption == optionCount
+end
+
+function WarMenu.IsItemSelected()
+	return currentKey == keys.select and WarMenu.IsItemHovered()
+end
+
 function WarMenu.SetMenuWidth(id, width)
 	setMenuProperty(id, 'width', width)
 end

@@ -9,6 +9,7 @@ Inspired by @MrDaGree  [GUI Management (Maker) | Mod Menu Style Menus (uhh.. ya)
 
 
 ## Features
+* Backward compatibility
 * Original GTA V look 'n' feel
 * Customize each menu separately
 * Create nested menus in one line
@@ -18,45 +19,41 @@ Inspired by @MrDaGree  [GUI Management (Maker) | Mod Menu Style Menus (uhh.. ya)
 ## Usage
 ```lua
 Citizen.CreateThread(function()
-	local items = { 'Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5' }
-	local currentItemIndex = 1
-	local selectedItemIndex = 1
-	local checkbox = true
-
 	WarMenu.CreateMenu('test', 'Test title')
 	WarMenu.CreateSubMenu('closeMenu', 'test', 'Are you sure?')
 
 	while true do
-		if WarMenu.IsMenuOpened('test') then
-			if WarMenu.CheckBox('Checkbox', checkbox) then
-				checkbox = not checkbox
-				-- Do your stuff here
-			elseif WarMenu.ComboBox('Combobox', items, currentItemIndex, selectedItemIndex, function(currentIndex, selectedIndex)
-					currentItemIndex = currentIndex
-					selectedItemIndex = selectedIndex
-
-					-- Do your stuff here if current index was changed (don't forget to check it)
-				end) then
-					-- Do your stuff here if current item was activated
-			elseif WarMenu.MenuButton('Exit', 'closeMenu') then
+		if not WarMenu.IsAnyMenuOpened() then
+			if IsControlJustReleased(0, 244) then
+				WarMenu.OpenMenu('test')
+			end
+		elseif WarMenu.IsMenuOpened('test') then
+			-- Basic control usage
+			if WarMenu.Button('Simple button') then
 			end
 
-			-- Always check current option AFTER drawing all controls and BEFORE WarMenu.Display() function call
-			Citizen.Trace(WarMenu.CurrentOption())
+			-- Advanced control usage
+			WarMenu.Button('Advanced button')
+			if WarMenu.IsItemHovered() then
+				if WarMenu.IsItemSelected() then
+				end
+			end
+
+			-- Menu button example
+			if WarMenu.MenuButton('Exit', 'closeMenu') then
+			end
 
 			WarMenu.Display()
 		elseif WarMenu.IsMenuOpened('closeMenu') then
 			if WarMenu.Button('Yes') then
 				WarMenu.CloseMenu()
-			elseif WarMenu.MenuButton('No', 'test') then
+			end
+
+			if WarMenu.MenuButton('No', 'test') then
 			end
 
 			WarMenu.Display()
-		elseif IsControlJustReleased(0, 244) then -- M by default
-			WarMenu.OpenMenu('test')
 		end
-
-		Citizen.Wait(0)
 	end
 end)
 ```
@@ -71,7 +68,6 @@ WarMenu.CreateMenu(id, title)
 WarMenu.CreateSubMenu(id, parent, subTitle)
 
 WarMenu.CurrentMenu() -- id
-WarMenu.CurrentOption() -- current index (>= 1) or nil
 
 WarMenu.OpenMenu(id)
 WarMenu.IsMenuOpened(id)
@@ -79,12 +75,16 @@ WarMenu.IsAnyMenuOpened()
 WarMenu.IsMenuAboutToBeClosed() -- return true if current menu will be closed in next frame
 WarMenu.CloseMenu()
 
--- Controls return true if activated
+-- Controls
 WarMenu.Button(text, subText)
 WarMenu.MenuButton(text, id, subText)
 WarMenu.CheckBox(text, bool, callback)
 WarMenu.ComboBox(text, items, currentIndex, selectedIndex, callback)
 -- Use them in loop to draw
+-- They return true if were selected OR you can use functions below for more granual control
+WarMenu.IsItemHovered()
+WarMenu.IsItemSelected()
+-- See Usage section for more details
 
 WarMenu.Display() -- Processing key events and menu logic, use it in loop
 
