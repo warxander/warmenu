@@ -41,20 +41,21 @@ local function isMenuVisible(id)
 	end
 end
 
-local function setMenuVisible(id, visible, holdCurrent)
+local function setMenuVisible(id, visible, holdCurrentOption)
 	if id and menus[id] then
 		setMenuProperty(id, 'visible', visible)
-
-		if not holdCurrent and menus[id] then
-			setMenuProperty(id, 'currentOption', 1)
-		end
 
 		if visible then
 			if id ~= currentMenu and isMenuVisible(currentMenu) then
 				setMenuVisible(currentMenu, false)
+				if not holdCurrentOption then
+					setMenuProperty(currentMenu, 'currentOption', 1)
+				end
 			end
 
 			currentMenu = id
+		else
+			setMenuProperty(id, 'currentOption', 1)
 		end
 	end
 end
@@ -267,11 +268,11 @@ function WarMenu.CloseMenu()
 		if menu.aboutToBeClosed then
 			menu.aboutToBeClosed = false
 			setMenuVisible(currentMenu, false)
-			debugPrint(tostring(currentMenu)..' menu closed')
-			PlaySoundFrontend(-1, 'QUIT', 'HUD_FRONTEND_DEFAULT_SOUNDSET', true)
 			optionCount = 0
 			currentMenu = nil
 			currentKey = nil
+			debugPrint(tostring(currentMenu)..' menu closed')
+			PlaySoundFrontend(-1, 'QUIT', 'HUD_FRONTEND_DEFAULT_SOUNDSET', true)
 		else
 			menu.aboutToBeClosed = true
 			debugPrint(tostring(currentMenu)..' menu about to be closed')
@@ -315,6 +316,7 @@ function WarMenu.MenuButton(text, id, subText)
 	if menus[id] then
 		if WarMenu.Button(text, subText) then
 			setMenuVisible(currentMenu, false)
+			setMenuProperty(currentMenu, 'currentOption', optionCount)
 			setMenuVisible(id, true, true)
 
 			return true
@@ -410,8 +412,8 @@ function WarMenu.Display()
 				currentKey = keys.select
 			elseif IsDisabledControlJustReleased(0, keys.back) then
 				if menus[menu.previousMenu] then
-					PlaySoundFrontend(-1, 'BACK', 'HUD_FRONTEND_DEFAULT_SOUNDSET', true)
 					setMenuVisible(menu.previousMenu, true)
+					PlaySoundFrontend(-1, 'BACK', 'HUD_FRONTEND_DEFAULT_SOUNDSET', true)
 				else
 					WarMenu.CloseMenu()
 				end
