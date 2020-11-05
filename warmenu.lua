@@ -191,7 +191,7 @@ function WarMenu.CreateMenu(id, title)
 	menus[id].subTextColor = { 189, 189, 189, 255 }
 	menus[id].focusTextColor = { 0, 0, 0, 255 }
 	menus[id].focusBackgroundColor = { 245, 245, 245, 255 }
-	menus[id].backgroundColor = { 0, 0, 0, 255 }
+	menus[id].backgroundColor = { 0, 0, 0, 160 }
 	menus[id].subTitleBackgroundColor = { 0, 0, 0, 255 }
 
 	menus[id].buttonPressedSound = { name = 'SELECT', set = 'HUD_FRONTEND_DEFAULT_SOUNDSET' } --https://pastebin.com/0neZdsZ5
