@@ -167,37 +167,39 @@ end
 
 function WarMenu.CreateMenu(id, title)
 	-- Default settings
-	menus[id] = { }
-	menus[id].title = title
-	menus[id].subTitle = 'INTERACTION MENU'
+	local menu = { }
 
-	menus[id].visible = false
+	menu.title = title
+	menu.subTitle = 'INTERACTION MENU'
 
-	menus[id].previousMenu = nil
+	menu.visible = false
 
-	menus[id].aboutToBeClosed = false
+	menu.previousMenu = nil
 
-	menus[id].x = 0.0175
-	menus[id].y = 0.025
-	menus[id].width = 0.23
+	menu.aboutToBeClosed = false
 
-	menus[id].currentOption = 1
-	menus[id].maxOptionCount = 10
+	menu.x = 0.0175
+	menu.y = 0.025
+	menu.width = 0.23
 
-	menus[id].titleFont = 1
-	menus[id].titleColor = { 0, 0, 0, 255 }
-	menus[id].titleBackgroundColor = { 245, 127, 23, 255 }
-	menus[id].titleBackgroundSprite = nil
+	menu.currentOption = 1
+	menu.maxOptionCount = 10
 
-	menus[id].textColor = { 255, 255, 255, 255 }
-	menus[id].subTextColor = { 189, 189, 189, 255 }
-	menus[id].focusTextColor = { 0, 0, 0, 255 }
-	menus[id].focusBackgroundColor = { 245, 245, 245, 255 }
-	menus[id].backgroundColor = { 0, 0, 0, 160 }
-	menus[id].subTitleBackgroundColor = { 0, 0, 0, 255 }
+	menu.titleFont = 1
+	menu.titleColor = { 0, 0, 0, 255 }
+	menu.titleBackgroundColor = { 245, 127, 23, 255 }
+	menu.titleBackgroundSprite = nil
 
-	menus[id].buttonPressedSound = { name = 'SELECT', set = 'HUD_FRONTEND_DEFAULT_SOUNDSET' } --https://pastebin.com/0neZdsZ5
+	menu.textColor = { 255, 255, 255, 255 }
+	menu.subTextColor = { 189, 189, 189, 255 }
+	menu.focusTextColor = { 0, 0, 0, 255 }
+	menu.focusBackgroundColor = { 245, 245, 245, 255 }
+	menu.backgroundColor = { 0, 0, 0, 160 }
+	menu.subTitleBackgroundColor = { 0, 0, 0, 255 }
 
+	menu.buttonPressedSound = { name = 'SELECT', set = 'HUD_FRONTEND_DEFAULT_SOUNDSET' } --https://pastebin.com/0neZdsZ5
+
+	menus[id] = menu
 	debugPrint(tostring(id)..' menu created')
 end
 
