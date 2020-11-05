@@ -62,7 +62,8 @@ end)
 
 ## API
 ```lua
-WarMenu.debug = bool -- false by default
+WarMenu.SetDebugEnabled(enabled) -- false by default
+WarMenu.IsDebugEnabled()
 
 WarMenu.CreateMenu(id, title)
 WarMenu.CreateSubMenu(id, parent, subTitle)

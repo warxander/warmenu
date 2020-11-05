@@ -157,6 +157,14 @@ local function drawButton(text, subText)
 	end
 end
 
+function WarMenu.SetDebugEnabled(enabled)
+	WarMenu.debug = enabled
+end
+
+function WarMenu.IsDebugEnabled()
+	return WarMenu.debug
+end
+
 function WarMenu.CreateMenu(id, title)
 	-- Default settings
 	menus[id] = { }
