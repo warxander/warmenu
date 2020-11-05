@@ -194,30 +194,26 @@ function WarMenu.CreateMenu(id, title)
 end
 
 function WarMenu.CreateSubMenu(id, parent, subTitle)
-	if menus[parent] then
-		WarMenu.CreateMenu(id, menus[parent].title)
+	local parentMenu = menus[parent]
 
-		if subTitle then
-			setMenuProperty(id, 'subTitle', string.upper(subTitle))
-		else
-			setMenuProperty(id, 'subTitle', string.upper(menus[parent].subTitle))
-		end
+	if parentMenu then
+		WarMenu.CreateMenu(id, parentMenu.title)
 
 		setMenuProperty(id, 'previousMenu', parent)
-
-		setMenuProperty(id, 'x', menus[parent].x)
-		setMenuProperty(id, 'y', menus[parent].y)
-		setMenuProperty(id, 'maxOptionCount', menus[parent].maxOptionCount)
-		setMenuProperty(id, 'titleFont', menus[parent].titleFont)
-		setMenuProperty(id, 'titleColor', menus[parent].titleColor)
-		setMenuProperty(id, 'titleBackgroundColor', menus[parent].titleBackgroundColor)
-		setMenuProperty(id, 'titleBackgroundSprite', menus[parent].titleBackgroundSprite)
-		setMenuProperty(id, 'textColor', menus[parent].textColor)
-		setMenuProperty(id, 'subTextColor', menus[parent].subTextColor)
-		setMenuProperty(id, 'focusTextColor', menus[parent].focusTextColor)
-		setMenuProperty(id, 'focusBackgroundColor', menus[parent].focusBackgroundColor)
-		setMenuProperty(id, 'backgroundColor', menus[parent].backgroundColor)
-		setMenuProperty(id, 'subTitleBackgroundColor', menus[parent].subTitleBackgroundColor)
+		setMenuProperty(id, 'subTitle', subTitle and string.upper(subTitle) or string.upper(parentMenu.subTitle))
+		setMenuProperty(id, 'x', parentMenu.x)
+		setMenuProperty(id, 'y', parentMenu.y)
+		setMenuProperty(id, 'maxOptionCount', parentMenu.maxOptionCount)
+		setMenuProperty(id, 'titleFont', parentMenu.titleFont)
+		setMenuProperty(id, 'titleColor', parentMenu.titleColor)
+		setMenuProperty(id, 'titleBackgroundColor', parentMenu.titleBackgroundColor)
+		setMenuProperty(id, 'titleBackgroundSprite', parentMenu.titleBackgroundSprite)
+		setMenuProperty(id, 'textColor', parentMenu.textColor)
+		setMenuProperty(id, 'subTextColor', parentMenu.subTextColor)
+		setMenuProperty(id, 'focusTextColor', parentMenu.focusTextColor)
+		setMenuProperty(id, 'focusBackgroundColor', parentMenu.focusBackgroundColor)
+		setMenuProperty(id, 'backgroundColor', parentMenu.backgroundColor)
+		setMenuProperty(id, 'subTitleBackgroundColor', parentMenu.subTitleBackgroundColor)
 	else
 		debugPrint('Failed to create '..tostring(id)..' submenu: '..tostring(parent)..' parent menu doesn\'t exist')
 	end
