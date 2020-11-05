@@ -205,21 +205,22 @@ function WarMenu.CreateSubMenu(id, parent, subTitle)
 	if parentMenu then
 		WarMenu.CreateMenu(id, parentMenu.title)
 
-		setMenuProperty(id, 'previousMenu', parent)
-		setMenuProperty(id, 'subTitle', subTitle and string.upper(subTitle) or string.upper(parentMenu.subTitle))
-		setMenuProperty(id, 'x', parentMenu.x)
-		setMenuProperty(id, 'y', parentMenu.y)
-		setMenuProperty(id, 'maxOptionCount', parentMenu.maxOptionCount)
-		setMenuProperty(id, 'titleFont', parentMenu.titleFont)
-		setMenuProperty(id, 'titleColor', parentMenu.titleColor)
-		setMenuProperty(id, 'titleBackgroundColor', parentMenu.titleBackgroundColor)
-		setMenuProperty(id, 'titleBackgroundSprite', parentMenu.titleBackgroundSprite)
-		setMenuProperty(id, 'textColor', parentMenu.textColor)
-		setMenuProperty(id, 'subTextColor', parentMenu.subTextColor)
-		setMenuProperty(id, 'focusTextColor', parentMenu.focusTextColor)
-		setMenuProperty(id, 'focusBackgroundColor', parentMenu.focusBackgroundColor)
-		setMenuProperty(id, 'backgroundColor', parentMenu.backgroundColor)
-		setMenuProperty(id, 'subTitleBackgroundColor', parentMenu.subTitleBackgroundColor)
+		local menu = menus[id]
+		menu.previousMenu = parent
+		menu.subTitle = subTitle and string.upper(subTitle) or string.upper(parentMenu.subTitle)
+		menu.x = parentMenu.x
+		menu.y = parentMenu.y
+		menu.maxOptionCount = parentMenu.maxOptionCount
+		menu.titleFont = parentMenu.titleFont
+		menu.titleColor = parentMenu.titleColor
+		menu.titleBackgroundColor = parentMenu.titleBackgroundColor
+		menu.titleBackgroundSprite = parentMenu.titleBackgroundSprite
+		menu.textColor = parentMenu.textColor
+		menu.subTextColor = parentMenu.subTextColor
+		menu.focusTextColor = parentMenu.focusTextColor
+		menu.focusBackgroundColor = parentMenu.focusBackgroundColor
+		menu.backgroundColor = parentMenu.backgroundColor
+		menu.subTitleBackgroundColor = parentMenu.subTitleBackgroundColor
 	else
 		debugPrint('Failed to create '..tostring(id)..' submenu: '..tostring(parent)..' parent menu doesn\'t exist')
 	end
