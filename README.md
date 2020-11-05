@@ -22,6 +22,8 @@ Citizen.CreateThread(function()
 	WarMenu.CreateMenu('test', 'Test title')
 	WarMenu.CreateSubMenu('closeMenu', 'test', 'Are you sure?')
 
+	local checkBoxState = false
+
 	while true do
 		if not WarMenu.IsAnyMenuOpened() then
 			if IsControlJustReleased(0, 244) then
@@ -30,6 +32,10 @@ Citizen.CreateThread(function()
 		elseif WarMenu.IsMenuOpened('test') then
 			-- Basic control usage
 			if WarMenu.Button('Simple button') then
+			end
+
+			if WarMenu.CheckBox('CheckBox', checkBoxState) then
+				checkBoxState = not checkBoxState
 			end
 
 			-- Advanced control usage
@@ -80,7 +86,7 @@ WarMenu.CloseMenu()
 -- Controls
 WarMenu.Button(text, subText)
 WarMenu.MenuButton(text, id, subText)
-WarMenu.CheckBox(text, bool, callback)
+WarMenu.CheckBox(text, boolState)
 WarMenu.ComboBox(text, items, currentIndex, selectedIndex, callback)
 -- Use them in loop to draw
 -- They return true if were selected OR you can use functions below for more granual control
