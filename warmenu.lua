@@ -107,12 +107,13 @@ local function drawSubTitle()
 	if menu then
 		local x = menu.x + menu.width / 2
 		local y = menu.y + titleHeight + buttonHeight / 2
+		local subTitleColor = menu.subTitleColor or menu.titleBackgroundColor
 
 		drawRect(x, y, menu.width, buttonHeight, menu.subTitleBackgroundColor)
-		drawText(menu.subTitle, menu.x + buttonTextXOffset, y - buttonHeight / 2 + buttonTextYOffset, buttonFont, menu.titleBackgroundColor, buttonScale, false)
+		drawText(menu.subTitle, menu.x + buttonTextXOffset, y - buttonHeight / 2 + buttonTextYOffset, buttonFont, subTitleColor, buttonScale, false)
 
 		if optionCount > menu.maxOptionCount then
-			drawText(tostring(menu.currentOption)..' / '..tostring(optionCount), menu.x + menu.width, y - buttonHeight / 2 + buttonTextYOffset, buttonFont, menu.titleBackgroundColor, buttonScale, false, false, true)
+			drawText(tostring(menu.currentOption)..' / '..tostring(optionCount), menu.x + menu.width, y - buttonHeight / 2 + buttonTextYOffset, buttonFont, subTitleColor, buttonScale, false, false, true)
 		end
 	end
 end
@@ -216,6 +217,7 @@ function WarMenu.CreateSubMenu(id, parent, subTitle)
 		menu.titleColor = parentMenu.titleColor
 		menu.titleBackgroundColor = parentMenu.titleBackgroundColor
 		menu.titleBackgroundSprite = parentMenu.titleBackgroundSprite
+		menu.subTitleColor = parentMenu.subTitleColor
 		menu.textColor = parentMenu.textColor
 		menu.subTextColor = parentMenu.subTextColor
 		menu.focusTextColor = parentMenu.focusTextColor
@@ -457,6 +459,10 @@ function WarMenu.SetTitleColor(id, r, g, b, a)
 	setMenuProperty(id, 'titleColor', { r, g, b, a or menus[id].titleColor[4] })
 end
 WarMenu.SetMenuTitleColor = WarMenu.SetTitleColor
+
+function WarMenu.SetMenuSubTitleColor(id, r, g, b, a)
+	setMenuProperty(id, 'subTitleColor', { r, g, b, a or 255 })
+end
 
 function WarMenu.SetTitleBackgroundColor(id, r, g, b, a)
 	setMenuProperty(id, 'titleBackgroundColor', { r, g, b, a or menus[id].titleBackgroundColor[4] })

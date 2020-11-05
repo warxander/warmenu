@@ -97,6 +97,7 @@ WarMenu.SetMenuMaxOptionCountOnScreen(id, count) -- 10 by default
 
 WarMenu.SetMenuTitle(id, title)
 WarMenu.SetMenuTitleColor(id, r, g, b, a)
+WarMenu.SetMenuSubTitleColor(id, r, g, b, a)
 WarMenu.SetMenuTitleBackgroundColor(id, r, g, b, a)
 -- or
 WarMenu.SetMenuTitleBackgroundSprite(id, textureDict, textureName)
