@@ -24,6 +24,9 @@ Citizen.CreateThread(function()
 
 	local checkBoxState = false
 
+	local comboBoxItems = { 'Foo', 'Bar' }
+	local comboBoxIndex = 1
+
 	while true do
 		if not WarMenu.IsAnyMenuOpened() then
 			if IsControlJustReleased(0, 244) then
@@ -38,10 +41,22 @@ Citizen.CreateThread(function()
 				checkBoxState = not checkBoxState
 			end
 
+			local _, index = WarMenu.ComboBox('ComboBox', comboBoxItems, comboBoxIndex)
+			if comboBoxIndex ~= index then
+				comboBoxIndex = index
+			end
+
 			-- Advanced control usage
 			WarMenu.Button('Advanced button')
 			if WarMenu.IsItemHovered() then
 				if WarMenu.IsItemSelected() then
+				end
+			end
+
+			local selected, index = WarMenu.ComboBox('ComboBox Advanced', comboBoxItems, comboBoxIndex)
+			if WarMenu.IsItemHovered() then
+				if selected and comboBoxIndex ~= index then
+					comboBoxIndex = index
 				end
 			end
 
@@ -87,7 +102,7 @@ WarMenu.CloseMenu()
 WarMenu.Button(text, subText)
 WarMenu.MenuButton(text, id, subText)
 WarMenu.CheckBox(text, boolState)
-WarMenu.ComboBox(text, items, currentIndex, selectedIndex, callback)
+WarMenu.ComboBox(text, items, currentIndex)
 -- Use them in loop to draw
 -- They return true if were selected OR you can use functions below for more granual control
 WarMenu.IsItemHovered()

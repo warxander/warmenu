@@ -347,7 +347,6 @@ end
 function WarMenu.ComboBox(text, items, currentIndex, selectedIndex, callback)
 	local itemsCount = #items
 	local selectedItem = items[currentIndex]
-	local isCurrent = menus[currentMenu].currentOption == (optionCount + 1)
 
 	if itemsCount > 1 and isCurrent then
 		selectedItem = '← '..tostring(selectedItem)..' →'
@@ -355,9 +354,11 @@ function WarMenu.ComboBox(text, items, currentIndex, selectedIndex, callback)
 
 	if WarMenu.Button(text, selectedItem) then
 		selectedIndex = currentIndex
-		callback(currentIndex, selectedIndex)
-		return true
-	elseif isCurrent then
+		if callback then callback(currentIndex, selectedIndex) end
+		return true, currentIndex
+	end
+
+	if menus[currentMenu].currentOption == (optionCount + 1) then
 		if currentKey == keys.left then
 			if currentIndex > 1 then currentIndex = currentIndex - 1 else currentIndex = itemsCount end
 		elseif currentKey == keys.right then
@@ -367,8 +368,8 @@ function WarMenu.ComboBox(text, items, currentIndex, selectedIndex, callback)
 		currentIndex = selectedIndex
 	end
 
-	callback(currentIndex, selectedIndex)
-	return false
+	if callback then callback(currentIndex, selectedIndex) end
+	return false, currentIndex
 end
 
 function WarMenu.Display()
