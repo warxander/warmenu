@@ -143,6 +143,8 @@ WarMenu.SetMenuButtonPressedSound(id, name, set) -- https://pastebin.com/0neZdsZ
 
 
 ## Changelog
+### 1.2
+* Added `WarMenu.SpriteButton` API
 ### 1.1
 * Added `WarMenu.ToolTip` API
 ### 1.0
