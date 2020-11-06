@@ -331,7 +331,7 @@ function WarMenu.ToolTip(text, width, flip)
 		setTextParams(buttonFont, menu.textColor, buttonScale, false, true, false, textX, textX + width - (buttonTextYOffset * 2))
 		local linesCount = getLinesCount(text, textX, menu.y)
 
-		local height = GetTextScaleHeight(buttonScale, buttonFont) * (linesCount + 1) + (buttonTextYOffset * 2)
+		local height = GetTextScaleHeight(buttonScale, buttonFont) * (linesCount + 1) + buttonTextYOffset
 		local y = menu.y + titleHeight + (buttonHeight * multiplier) + height / 2
 
 		drawRect(x, y, width, height, menu.backgroundColor)
