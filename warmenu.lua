@@ -80,7 +80,7 @@ local function setTextParams(font, color, scale, center, shadow, alignRight, wra
 	if not wrapFrom or not wrapTo then
 		local menu = menus[currentMenu]
 		wrapFrom = wrapFrom or menu.x
-		wrapTo = wrapTo or menu.x + menu.width - buttonTextXOffset * 2
+		wrapTo = wrapTo or menu.x + menu.width - buttonTextXOffset
 	end
 
 	SetTextWrap(wrapFrom, wrapTo)
