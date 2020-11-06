@@ -34,27 +34,30 @@ Citizen.CreateThread(function()
 			end
 		elseif WarMenu.IsMenuOpened('test') then
 			-- Basic control usage
-			if WarMenu.Button('Simple button') then
+			if WarMenu.Button('Simple Button') then
 			end
 
-			if WarMenu.CheckBox('CheckBox', checkBoxState) then
+			if WarMenu.SpriteButton('Sprite Button', 'commonmenu', 'shop_gunclub_icon_b') then
+			end
+
+			if WarMenu.CheckBox('Checkbox', checkBoxState) then
 				checkBoxState = not checkBoxState
 			end
 
-			local _, index = WarMenu.ComboBox('ComboBox', comboBoxItems, comboBoxIndex)
+			local _, index = WarMenu.ComboBox('Combobox', comboBoxItems, comboBoxIndex)
 			if comboBoxIndex ~= index then
 				comboBoxIndex = index
 			end
 
 			-- Advanced control usage
-			WarMenu.Button('Advanced button')
+			WarMenu.Button('Advanced Button')
 			if WarMenu.IsItemHovered() then
 				WarMenu.ToolTip('This is tooltip example.')
 				if WarMenu.IsItemSelected() then
 				end
 			end
 
-			local selected, index = WarMenu.ComboBox('ComboBox Advanced', comboBoxItems, comboBoxIndex)
+			local selected, index = WarMenu.ComboBox('Advanced Combobox', comboBoxItems, comboBoxIndex)
 			if WarMenu.IsItemHovered() then
 				if selected and comboBoxIndex ~= index then
 					comboBoxIndex = index
@@ -101,6 +104,7 @@ WarMenu.CloseMenu()
 
 -- Controls
 WarMenu.Button(text, subText)
+WarMenu.SpriteButton(text, dict, name, r, g, b, a)
 WarMenu.MenuButton(text, id, subText)
 WarMenu.CheckBox(text, boolState)
 WarMenu.ComboBox(text, items, currentIndex)

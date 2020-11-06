@@ -12,6 +12,9 @@ local currentMenu = nil
 
 local toolTipWidth = 0.153
 
+local spriteWidth = 0.027
+local spriteHeight = spriteWidth * GetAspectRatio()
+
 local titleHeight = 0.11
 local titleYOffset = 0.03
 local titleScale = 1.0
@@ -21,6 +24,8 @@ local buttonFont = 0
 local buttonScale = 0.365
 local buttonTextXOffset = 0.005
 local buttonTextYOffset = 0.005
+local buttonSpriteXOffset = 0.002
+local buttonSpriteYOffset = 0.005
 
 local function debugPrint(text)
 	if WarMenu.debug then
@@ -373,6 +378,27 @@ function WarMenu.Button(text, subText)
 	end
 end
 
+function WarMenu.SpriteButton(text, dict, name, r, g, b, a)
+	local selected = WarMenu.Button(text)
+
+	if not HasStreamedTextureDictLoaded(dict) then
+		RequestStreamedTextureDict(dict)
+	end
+
+	local menu = menus[currentMenu]
+
+	local multiplier = nil
+	if menu.currentOption <= menu.maxOptionCount and optionCount <= menu.maxOptionCount then
+		multiplier = optionCount
+	elseif optionCount > menu.currentOption - menu.maxOptionCount and optionCount <= menu.currentOption then
+		multiplier = optionCount - (menu.currentOption - menu.maxOptionCount)
+	end
+
+	DrawSprite(dict, name, menu.x + menu.width - spriteWidth / 2 - buttonSpriteXOffset, menu.y + titleHeight + buttonHeight + (buttonHeight * multiplier) - spriteHeight / 2 + buttonSpriteYOffset, spriteWidth, spriteHeight, 0., r or 255, g or 255, b or 255, a or 255)
+
+	return selected
+end
+
 function WarMenu.MenuButton(text, id, subText)
 	if menus[id] then
 		if WarMenu.Button(text, subText) then
@@ -390,7 +416,14 @@ function WarMenu.MenuButton(text, id, subText)
 end
 
 function WarMenu.CheckBox(text, checked, callback)
-	if WarMenu.Button(text, checked and 'On' or 'Off') then
+	local name = nil
+	if menus[currentMenu].currentOption == optionCount + 1 then
+		name = checked and 'shop_box_tickb' or 'shop_box_blankb'
+	else
+		name = checked and 'shop_box_tick' or 'shop_box_blank'
+	end
+
+	if WarMenu.SpriteButton(text, 'commonmenu', name) then
 		checked = not checked
 		debugPrint(tostring(text)..' checkbox changed to '..tostring(checked))
 		if callback then callback(checked) end
