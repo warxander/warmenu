@@ -10,6 +10,8 @@ local optionCount = 0
 local currentKey = nil
 local currentMenu = nil
 
+local toolTipWidth = 0.153
+
 local titleHeight = 0.11
 local titleYOffset = 0.03
 local titleScale = 1.0
@@ -60,7 +62,7 @@ local function setMenuVisible(id, visible, holdCurrentOption)
 	end
 end
 
-local function drawText(text, x, y, font, color, scale, center, shadow, alignRight)
+local function setTextParams(font, color, scale, center, shadow, alignRight, wrapFrom, wrapTo)
 	SetTextFont(font)
 	SetTextColour(color[1], color[2], color[3], color[4] or 255)
 	SetTextScale(scale, scale)
@@ -72,11 +74,25 @@ local function drawText(text, x, y, font, color, scale, center, shadow, alignRig
 	if center then
 		SetTextCentre(center)
 	elseif alignRight then
-		local menu = menus[currentMenu]
 		SetTextRightJustify(true)
-		SetTextWrap(menu.x, menu.x + menu.width - buttonTextXOffset)
 	end
 
+	if not wrapFrom or not wrapTo then
+		local menu = menus[currentMenu]
+		wrapFrom = wrapFrom or menu.x
+		wrapTo = wrapTo or menu.x + menu.width - buttonTextXOffset * 2
+	end
+
+	SetTextWrap(wrapFrom, wrapTo)
+end
+
+local function getLinesCount(text, x, y)
+	BeginTextCommandLineCount('STRING')
+	AddTextComponentString(tostring(text))
+	return EndTextCommandGetLineCount(x, y)
+end
+
+local function drawText(text, x, y)
 	BeginTextCommandDisplayText('STRING')
 	AddTextComponentString(tostring(text))
 	EndTextCommandDisplayText(x, y)
@@ -98,7 +114,8 @@ local function drawTitle()
 			drawRect(x, y, menu.width, titleHeight, menu.titleBackgroundColor)
 		end
 
-		drawText(menu.title, x, y - titleHeight / 2 + titleYOffset, menu.titleFont, menu.titleColor, titleScale, true)
+		setTextParams(menu.titleFont, menu.titleColor, titleScale, true)
+		drawText(menu.title, x, y - titleHeight / 2 + titleYOffset)
 	end
 end
 
@@ -110,10 +127,13 @@ local function drawSubTitle()
 		local subTitleColor = menu.subTitleColor or menu.titleBackgroundColor
 
 		drawRect(x, y, menu.width, buttonHeight, menu.subTitleBackgroundColor)
-		drawText(menu.subTitle, menu.x + buttonTextXOffset, y - buttonHeight / 2 + buttonTextYOffset, buttonFont, subTitleColor, buttonScale, false)
+
+		setTextParams(buttonFont, subTitleColor, buttonScale, false)
+		drawText(menu.subTitle, menu.x + buttonTextXOffset, y - buttonHeight / 2 + buttonTextYOffset)
 
 		if optionCount > menu.maxOptionCount then
-			drawText(tostring(menu.currentOption)..' / '..tostring(optionCount), menu.x + menu.width, y - buttonHeight / 2 + buttonTextYOffset, buttonFont, subTitleColor, buttonScale, false, false, true)
+			setTextParams(buttonFont, subTitleColor, buttonScale, false, false, true)
+			drawText(tostring(menu.currentOption)..' / '..tostring(optionCount), menu.x + menu.width, y - buttonHeight / 2 + buttonTextYOffset)
 		end
 	end
 end
@@ -149,10 +169,13 @@ local function drawButton(text, subText)
 		end
 
 		drawRect(x, y, menu.width, buttonHeight, backgroundColor)
-		drawText(text, menu.x + buttonTextXOffset, y - (buttonHeight / 2) + buttonTextYOffset, buttonFont, textColor, buttonScale, false, shadow)
+
+		setTextParams(buttonFont, textColor, buttonScale, false, shadow)
+		drawText(text, menu.x + buttonTextXOffset, y - (buttonHeight / 2) + buttonTextYOffset)
 
 		if subText then
-			drawText(subText, menu.x + buttonTextXOffset, y - buttonHeight / 2 + buttonTextYOffset, buttonFont, subTextColor, buttonScale, false, shadow, true)
+			setTextParams(buttonFont, subTextColor, buttonScale, false, shadow, true)
+			drawText(subText, menu.x + buttonTextXOffset, y - buttonHeight / 2 + buttonTextYOffset)
 		end
 	end
 end
@@ -281,6 +304,40 @@ function WarMenu.CloseMenu()
 			menu.aboutToBeClosed = true
 			debugPrint(tostring(currentMenu)..' menu about to be closed')
 		end
+	end
+end
+
+function WarMenu.ToolTip(text, width, flip)
+	width = width or toolTipWidth
+
+	local menu = menus[currentMenu]
+
+	local x = nil
+	if not flip then
+		x = menu.x + menu.width + width / 2 + buttonTextXOffset
+	else
+		x = menu.x - width / 2 - buttonTextXOffset
+	end
+
+	local multiplier = nil
+	if menu.currentOption <= menu.maxOptionCount and optionCount <= menu.maxOptionCount then
+		multiplier = optionCount
+	elseif optionCount > menu.currentOption - menu.maxOptionCount and optionCount <= menu.currentOption then
+		multiplier = optionCount - (menu.currentOption - menu.maxOptionCount)
+	end
+
+	if multiplier then
+		local textX = x - (width / 2) + buttonTextXOffset
+		setTextParams(buttonFont, menu.textColor, buttonScale, false, true, false, textX, textX + width - (buttonTextYOffset * 2))
+		local linesCount = getLinesCount(text, textX, menu.y)
+
+		local height = GetTextScaleHeight(buttonScale, buttonFont) * (linesCount + 1) + (buttonTextYOffset * 2)
+		local y = menu.y + titleHeight + (buttonHeight * multiplier) + height / 2
+
+		drawRect(x, y, width, height, menu.backgroundColor)
+
+		y = y - (height / 2) + buttonTextYOffset
+		drawText(text, textX, y)
 	end
 end
 

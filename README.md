@@ -49,6 +49,7 @@ Citizen.CreateThread(function()
 			-- Advanced control usage
 			WarMenu.Button('Advanced button')
 			if WarMenu.IsItemHovered() then
+				WarMenu.ToolTip('This is tooltip example.')
 				if WarMenu.IsItemSelected() then
 				end
 			end
@@ -103,6 +104,7 @@ WarMenu.Button(text, subText)
 WarMenu.MenuButton(text, id, subText)
 WarMenu.CheckBox(text, boolState)
 WarMenu.ComboBox(text, items, currentIndex)
+WarMenu.ToolTip(text, width, flip)
 -- Use them in loop to draw
 -- They return true if were selected OR you can use functions below for more granual control
 WarMenu.IsItemHovered()
