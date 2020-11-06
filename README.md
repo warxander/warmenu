@@ -139,6 +139,8 @@ WarMenu.SetMenuButtonPressedSound(id, name, set) -- https://pastebin.com/0neZdsZ
 
 
 ## Changelog
+### 1.1
+* Added `WarMenu.ToolTip` API
 ### 1.0
 * Added `WarMenu.IsItemHovered` and `WarMenu.IsItemSelected` API
 * Implemented restoring parent menu selected index after closing submenu
