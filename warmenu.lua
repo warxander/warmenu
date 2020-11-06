@@ -307,13 +307,13 @@ function WarMenu.CloseMenu()
 	end
 end
 
-function WarMenu.ToolTip(text, width, flip)
+function WarMenu.ToolTip(text, width, flipHorizontal)
 	width = width or toolTipWidth
 
 	local menu = menus[currentMenu]
 
 	local x = nil
-	if not flip then
+	if not flipHorizontal then
 		x = menu.x + menu.width + width / 2 + buttonTextXOffset
 	else
 		x = menu.x - width / 2 - buttonTextXOffset

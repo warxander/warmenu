@@ -104,7 +104,7 @@ WarMenu.Button(text, subText)
 WarMenu.MenuButton(text, id, subText)
 WarMenu.CheckBox(text, boolState)
 WarMenu.ComboBox(text, items, currentIndex)
-WarMenu.ToolTip(text, width, flip)
+WarMenu.ToolTip(text, width, flipHorizontal)
 -- Use them in loop to draw
 -- They return true if were selected OR you can use functions below for more granual control
 WarMenu.IsItemHovered()
