@@ -50,10 +50,17 @@ end
 
 local function setMenuVisible(id, visible, holdCurrentOption)
 	if id and menus[id] then
+		local isMenuVisible = isMenuVisible(id)
+		if isMenuVisible == visible then
+			return
+		end
+
 		setMenuProperty(id, 'visible', visible)
 
 		if visible then
-			if id ~= currentMenu and isMenuVisible(currentMenu) then
+			if not currentMenu then
+				setMenuProperty(id, 'currentOption', 1)
+			else
 				setMenuVisible(currentMenu, false)
 				if not holdCurrentOption then
 					setMenuProperty(currentMenu, 'currentOption', 1)
@@ -61,8 +68,6 @@ local function setMenuVisible(id, visible, holdCurrentOption)
 			end
 
 			currentMenu = id
-		else
-			setMenuProperty(id, 'currentOption', 1)
 		end
 	end
 end
