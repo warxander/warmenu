@@ -46,27 +46,30 @@ local function setMenuProperty(id, property, value)
 end
 
 local function setMenuVisible(id, visible, holdCurrentOption)
-	if visible then
-		if currentMenu == id then
-			return
-		end
-	else
-		if currentMenu ~= id then
-			return
+	if currentMenu then
+		if visible then
+			if currentMenu.id == id then
+				return
+			end
+		else
+			if currentMenu.id ~= id then
+				return
+			end
 		end
 	end
 
 	if visible then
+		local menu = menus[id]
+
 		if not currentMenu then
-			menus[id].currentOption = 1
+			menu.currentOption = 1
 		else
 			if not holdCurrentOption then
-				menus[currentMenu].currentOption = 1
+				menus[currentMenu.id].currentOption = 1
 			end
-			setMenuVisible(currentMenu, false)
 		end
 
-		currentMenu = id
+		currentMenu = menu
 	else
 		currentMenu = nil
 	end
@@ -88,9 +91,8 @@ local function setTextParams(font, color, scale, center, shadow, alignRight, wra
 	end
 
 	if not wrapFrom or not wrapTo then
-		local menu = menus[currentMenu]
-		wrapFrom = wrapFrom or menu.x
-		wrapTo = wrapTo or menu.x + menu.width - buttonTextXOffset
+		wrapFrom = wrapFrom or currentMenu.x
+		wrapTo = wrapTo or currentMenu.x + currentMenu.width - buttonTextXOffset
 	end
 
 	SetTextWrap(wrapFrom, wrapTo)
@@ -112,54 +114,48 @@ local function drawRect(x, y, width, height, color)
 	DrawRect(x, y, width, height, color[1], color[2], color[3], color[4] or 255)
 end
 
-local function getCurrentIndex(menu)
-	if menu.currentOption <= menu.maxOptionCount and optionCount <= menu.maxOptionCount then
+local function getCurrentIndex()
+	if currentMenu.currentOption <= currentMenu.maxOptionCount and optionCount <= currentMenu.maxOptionCount then
 		return optionCount
-	elseif optionCount > menu.currentOption - menu.maxOptionCount and optionCount <= menu.currentOption then
-		return optionCount - (menu.currentOption - menu.maxOptionCount)
+	elseif optionCount > currentMenu.currentOption - currentMenu.maxOptionCount and optionCount <= currentMenu.currentOption then
+		return optionCount - (currentMenu.currentOption - currentMenu.maxOptionCount)
 	end
 
 	return nil
 end
 
 local function drawTitle()
-	local menu = menus[currentMenu]
+	local x = currentMenu.x + currentMenu.width / 2
+	local y = currentMenu.y + titleHeight / 2
 
-	local x = menu.x + menu.width / 2
-	local y = menu.y + titleHeight / 2
-
-	if menu.titleBackgroundSprite then
-		DrawSprite(menu.titleBackgroundSprite.dict, menu.titleBackgroundSprite.name, x, y, menu.width, titleHeight, 0., 255, 255, 255, 255)
+	if currentMenu.titleBackgroundSprite then
+		DrawSprite(currentMenu.titleBackgroundSprite.dict, currentMenu.titleBackgroundSprite.name, x, y, currentMenu.width, titleHeight, 0., 255, 255, 255, 255)
 	else
-		drawRect(x, y, menu.width, titleHeight, menu.titleBackgroundColor)
+		drawRect(x, y, currentMenu.width, titleHeight, currentMenu.titleBackgroundColor)
 	end
 
-	setTextParams(menu.titleFont, menu.titleColor, titleScale, true)
-	drawText(menu.title, x, y - titleHeight / 2 + titleYOffset)
+	setTextParams(currentMenu.titleFont, currentMenu.titleColor, titleScale, true)
+	drawText(currentMenu.title, x, y - titleHeight / 2 + titleYOffset)
 end
 
 local function drawSubTitle()
-	local menu = menus[currentMenu]
+	local x = currentMenu.x + currentMenu.width / 2
+	local y = currentMenu.y + titleHeight + buttonHeight / 2
+	local subTitleColor = currentMenu.subTitleColor or currentMenu.titleBackgroundColor
 
-	local x = menu.x + menu.width / 2
-	local y = menu.y + titleHeight + buttonHeight / 2
-	local subTitleColor = menu.subTitleColor or menu.titleBackgroundColor
-
-	drawRect(x, y, menu.width, buttonHeight, menu.subTitleBackgroundColor)
+	drawRect(x, y, currentMenu.width, buttonHeight, currentMenu.subTitleBackgroundColor)
 
 	setTextParams(buttonFont, subTitleColor, buttonScale, false)
-	drawText(menu.subTitle, menu.x + buttonTextXOffset, y - buttonHeight / 2 + buttonTextYOffset)
+	drawText(currentMenu.subTitle, currentMenu.x + buttonTextXOffset, y - buttonHeight / 2 + buttonTextYOffset)
 
-	if optionCount > menu.maxOptionCount then
+	if optionCount > currentMenu.maxOptionCount then
 		setTextParams(buttonFont, subTitleColor, buttonScale, false, false, true)
-		drawText(tostring(menu.currentOption)..' / '..tostring(optionCount), menu.x + menu.width, y - buttonHeight / 2 + buttonTextYOffset)
+		drawText(tostring(currentMenu.currentOption)..' / '..tostring(optionCount), currentMenu.x + currentMenu.width, y - buttonHeight / 2 + buttonTextYOffset)
 	end
 end
 
 local function drawButton(text, subText)
-	local menu = menus[currentMenu]
-
-	local currentIndex = getCurrentIndex(menu)
+	local currentIndex = getCurrentIndex()
 	if not currentIndex then
 		return
 	end
@@ -169,34 +165,36 @@ local function drawButton(text, subText)
 	local subTextColor = nil
 	local shadow = false
 
-	if menu.currentOption == optionCount then
-		backgroundColor = menu.focusColor
-		textColor = menu.focusTextColor
-		subTextColor = menu.focusTextColor
+	if currentMenu.currentOption == optionCount then
+		backgroundColor = currentMenu.focusColor
+		textColor = currentMenu.focusTextColor
+		subTextColor = currentMenu.focusTextColor
 	else
-		backgroundColor = menu.backgroundColor
-		textColor = menu.textColor
-		subTextColor = menu.subTextColor
+		backgroundColor = currentMenu.backgroundColor
+		textColor = currentMenu.textColor
+		subTextColor = currentMenu.subTextColor
 		shadow = true
 	end
 
-	local x = menu.x + menu.width / 2
-	local y = menu.y + titleHeight + buttonHeight + (buttonHeight * currentIndex) - buttonHeight / 2
+	local x = currentMenu.x + currentMenu.width / 2
+	local y = currentMenu.y + titleHeight + buttonHeight + (buttonHeight * currentIndex) - buttonHeight / 2
 
-	drawRect(x, y, menu.width, buttonHeight, backgroundColor)
+	drawRect(x, y, currentMenu.width, buttonHeight, backgroundColor)
 
 	setTextParams(buttonFont, textColor, buttonScale, false, shadow)
-	drawText(text, menu.x + buttonTextXOffset, y - (buttonHeight / 2) + buttonTextYOffset)
+	drawText(text, currentMenu.x + buttonTextXOffset, y - (buttonHeight / 2) + buttonTextYOffset)
 
 	if subText then
 		setTextParams(buttonFont, subTextColor, buttonScale, false, shadow, true)
-		drawText(subText, menu.x + buttonTextXOffset, y - buttonHeight / 2 + buttonTextYOffset)
+		drawText(subText, currentMenu.x + buttonTextXOffset, y - buttonHeight / 2 + buttonTextYOffset)
 	end
 end
 
 function WarMenu.CreateMenu(id, title)
 	-- Default settings
 	local menu = { }
+
+	menu.id = id
 
 	menu.title = title
 	menu.subTitle = 'INTERACTION MENU'
@@ -238,6 +236,7 @@ function WarMenu.CreateSubMenu(id, parent, subTitle)
 	WarMenu.CreateMenu(id, parentMenu.title)
 
 	local menu = menus[id]
+
 	menu.previousMenu = parent
 	menu.subTitle = subTitle and string.upper(subTitle) or string.upper(parentMenu.subTitle)
 	menu.x = parentMenu.x
@@ -257,7 +256,7 @@ function WarMenu.CreateSubMenu(id, parent, subTitle)
 end
 
 function WarMenu.CurrentMenu()
-	return currentMenu
+	return currentMenu and currentMenu.id or nil
 end
 
 function WarMenu.OpenMenu(id)
@@ -268,7 +267,7 @@ function WarMenu.OpenMenu(id)
 end
 
 function WarMenu.IsMenuOpened(id)
-	return currentMenu == id
+	return currentMenu and currentMenu.id == id
 end
 
 function WarMenu.IsAnyMenuOpened()
@@ -276,33 +275,27 @@ function WarMenu.IsAnyMenuOpened()
 end
 
 function WarMenu.IsMenuAboutToBeClosed()
-	local menu = menus[currentMenu]
-	if menu then
-		return menu.aboutToBeClosed
-	else
-		return false
-	end
+	return currentMenu and currentMenu.aboutToBeClosed
 end
 
 function WarMenu.CloseMenu()
-	local menu = menus[currentMenu]
-	if menu then
-		if menu.aboutToBeClosed then
-			menu.aboutToBeClosed = false
-			setMenuVisible(currentMenu, false)
-			optionCount = 0
-			currentKey = nil
-			PlaySoundFrontend(-1, 'QUIT', 'HUD_FRONTEND_DEFAULT_SOUNDSET', true)
-		else
-			menu.aboutToBeClosed = true
-		end
+	if not currentMenu then
+		return
+	end
+
+	if currentMenu.aboutToBeClosed then
+		currentMenu.aboutToBeClosed = false
+		setMenuVisible(currentMenu.id, false)
+		optionCount = 0
+		currentKey = nil
+		PlaySoundFrontend(-1, 'QUIT', 'HUD_FRONTEND_DEFAULT_SOUNDSET', true)
+	else
+		currentMenu.aboutToBeClosed = true
 	end
 end
 
 function WarMenu.ToolTip(text, width, flipHorizontal)
-	local menu = menus[currentMenu]
-
-	local currentIndex = getCurrentIndex(menu)
+	local currentIndex = getCurrentIndex()
 	if not currentIndex then
 		return
 	end
@@ -311,19 +304,19 @@ function WarMenu.ToolTip(text, width, flipHorizontal)
 
 	local x = nil
 	if not flipHorizontal then
-		x = menu.x + menu.width + width / 2 + buttonTextXOffset
+		x = currentMenu.x + currentMenu.width + width / 2 + buttonTextXOffset
 	else
-		x = menu.x - width / 2 - buttonTextXOffset
+		x = currentMenu.x - width / 2 - buttonTextXOffset
 	end
 
 	local textX = x - (width / 2) + buttonTextXOffset
-	setTextParams(buttonFont, menu.textColor, buttonScale, false, true, false, textX, textX + width - (buttonTextYOffset * 2))
-	local linesCount = getLinesCount(text, textX, menu.y)
+	setTextParams(buttonFont, currentMenu.textColor, buttonScale, false, true, false, textX, textX + width - (buttonTextYOffset * 2))
+	local linesCount = getLinesCount(text, textX, currentMenu.y)
 
 	local height = GetTextScaleHeight(buttonScale, buttonFont) * (linesCount + 1) + buttonTextYOffset
-	local y = menu.y + titleHeight + (buttonHeight * currentIndex) + height / 2
+	local y = currentMenu.y + titleHeight + (buttonHeight * currentIndex) + height / 2
 
-	drawRect(x, y, width, height, menu.backgroundColor)
+	drawRect(x, y, width, height, currentMenu.backgroundColor)
 
 	y = y - (height / 2) + buttonTextYOffset
 	drawText(text, textX, y)
@@ -336,11 +329,10 @@ function WarMenu.Button(text, subText)
 
 	local pressed = false
 
-	local menu = menus[currentMenu]
-	if menu.currentOption == optionCount then
+	if currentMenu.currentOption == optionCount then
 		if currentKey == keys.select then
 			pressed = true
-			PlaySoundFrontend(-1, menu.buttonPressedSound.name, menu.buttonPressedSound.set, true)
+			PlaySoundFrontend(-1, currentMenu.buttonPressedSound.name, currentMenu.buttonPressedSound.set, true)
 		elseif currentKey == keys.left or currentKey == keys.right then
 			PlaySoundFrontend(-1, 'NAV_UP_DOWN', 'HUD_FRONTEND_DEFAULT_SOUNDSET', true)
 		end
@@ -350,11 +342,9 @@ function WarMenu.Button(text, subText)
 end
 
 function WarMenu.SpriteButton(text, dict, name, r, g, b, a)
-	local menu = menus[currentMenu]
-
 	local pressed = WarMenu.Button(text)
 
-	local currentIndex = getCurrentIndex(menu)
+	local currentIndex = getCurrentIndex()
 	if not currentIndex then
 		return
 	end
@@ -362,7 +352,7 @@ function WarMenu.SpriteButton(text, dict, name, r, g, b, a)
 	if not HasStreamedTextureDictLoaded(dict) then
 		RequestStreamedTextureDict(dict)
 	end
-	DrawSprite(dict, name, menu.x + menu.width - spriteWidth / 2 - buttonSpriteXOffset, menu.y + titleHeight + buttonHeight + (buttonHeight * currentIndex) - spriteHeight / 2 + buttonSpriteYOffset, spriteWidth, spriteHeight, 0., r or 255, g or 255, b or 255, a or 255)
+	DrawSprite(dict, name, currentMenu.x + currentMenu.width - spriteWidth / 2 - buttonSpriteXOffset, currentMenu.y + titleHeight + buttonHeight + (buttonHeight * currentIndex) - spriteHeight / 2 + buttonSpriteYOffset, spriteWidth, spriteHeight, 0., r or 255, g or 255, b or 255, a or 255)
 
 	return pressed
 end
@@ -371,8 +361,8 @@ function WarMenu.MenuButton(text, id, subText)
 	local pressed = WarMenu.Button(text, subText)
 
 	if pressed then
-		menus[currentMenu].currentOption = optionCount
-		setMenuVisible(currentMenu, false)
+		currentMenu.currentOption = optionCount
+		setMenuVisible(currentMenu.id, false)
 		setMenuVisible(id, true, true)
 	end
 
@@ -381,7 +371,7 @@ end
 
 function WarMenu.CheckBox(text, checked, callback)
 	local name = nil
-	if menus[currentMenu].currentOption == optionCount + 1 then
+	if currentMenu.currentOption == optionCount + 1 then
 		name = checked and 'shop_box_tickb' or 'shop_box_blankb'
 	else
 		name = checked and 'shop_box_tick' or 'shop_box_blank'
@@ -400,7 +390,7 @@ end
 function WarMenu.ComboBox(text, items, currentIndex, selectedIndex, callback)
 	local itemsCount = #items
 	local selectedItem = items[currentIndex]
-	local isCurrent = menus[currentMenu].currentOption == optionCount + 1
+	local isCurrent = currentMenu.currentOption == optionCount + 1
 	selectedIndex = selectedIndex or currentIndex
 
 	if itemsCount > 1 and isCurrent then
@@ -432,9 +422,7 @@ function WarMenu.Display()
 		DisableControlAction(0, keys.back, true)
 		DisableControlAction(0, keys.select, true)
 
-		local menu = menus[currentMenu]
-
-		if menu.aboutToBeClosed then
+		if currentMenu.aboutToBeClosed then
 			WarMenu.CloseMenu()
 		else
 			ClearAllHelpMessages()
@@ -447,18 +435,18 @@ function WarMenu.Display()
 			if IsDisabledControlJustReleased(0, keys.down) then
 				PlaySoundFrontend(-1, 'NAV_UP_DOWN', 'HUD_FRONTEND_DEFAULT_SOUNDSET', true)
 
-				if menu.currentOption < optionCount then
-					menu.currentOption = menu.currentOption + 1
+				if currentMenu.currentOption < optionCount then
+					currentMenu.currentOption = currentMenu.currentOption + 1
 				else
-					menu.currentOption = 1
+					currentMenu.currentOption = 1
 				end
 			elseif IsDisabledControlJustReleased(0, keys.up) then
 				PlaySoundFrontend(-1, 'NAV_UP_DOWN', 'HUD_FRONTEND_DEFAULT_SOUNDSET', true)
 
-				if menu.currentOption > 1 then
-					menu.currentOption = menu.currentOption - 1
+				if currentMenu.currentOption > 1 then
+					currentMenu.currentOption = currentMenu.currentOption - 1
 				else
-					menu.currentOption = optionCount
+					currentMenu.currentOption = optionCount
 				end
 			elseif IsDisabledControlJustReleased(0, keys.left) then
 				currentKey = keys.left
@@ -467,8 +455,8 @@ function WarMenu.Display()
 			elseif IsDisabledControlJustReleased(0, keys.select) then
 				currentKey = keys.select
 			elseif IsDisabledControlJustReleased(0, keys.back) then
-				if menus[menu.previousMenu] then
-					setMenuVisible(menu.previousMenu, true)
+				if menus[currentMenu.previousMenu] then
+					setMenuVisible(currentMenu.previousMenu, true)
 					PlaySoundFrontend(-1, 'BACK', 'HUD_FRONTEND_DEFAULT_SOUNDSET', true)
 				else
 					WarMenu.CloseMenu()
@@ -481,8 +469,8 @@ function WarMenu.Display()
 end
 
 function WarMenu.CurrentOption()
-	if currentMenu and optionCount ~= 0 and menus[currentMenu] then
-		return menus[currentMenu].currentOption
+	if currentMenu and optionCount ~= 0 then
+		return currentMenu.currentOption
 	end
 
 	return nil
@@ -493,7 +481,7 @@ function WarMenu.IsItemHovered()
 		return false
 	end
 
-	return menus[currentMenu].currentOption == optionCount
+	return currentMenu.currentOption == optionCount
 end
 
 function WarMenu.IsItemSelected()
