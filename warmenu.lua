@@ -107,6 +107,16 @@ local function drawRect(x, y, width, height, color)
 	DrawRect(x, y, width, height, color[1], color[2], color[3], color[4] or 255)
 end
 
+local function getCurrentIndex(menu)
+	if menu.currentOption <= menu.maxOptionCount and optionCount <= menu.maxOptionCount then
+		return optionCount
+	elseif optionCount > menu.currentOption - menu.maxOptionCount and optionCount <= menu.currentOption then
+		return optionCount - (menu.currentOption - menu.maxOptionCount)
+	end
+
+	return nil
+end
+
 local function drawTitle()
 	local menu = menus[currentMenu]
 	if menu then
@@ -146,42 +156,38 @@ end
 local function drawButton(text, subText)
 	local menu = menus[currentMenu]
 
-	local x = menu.x + menu.width / 2
-	local multiplier = nil
-
-	if menu.currentOption <= menu.maxOptionCount and optionCount <= menu.maxOptionCount then
-		multiplier = optionCount
-	elseif optionCount > menu.currentOption - menu.maxOptionCount and optionCount <= menu.currentOption then
-		multiplier = optionCount - (menu.currentOption - menu.maxOptionCount)
+	local currentIndex = getCurrentIndex(menu)
+	if not currentIndex then
+		return
 	end
 
-	if multiplier then
-		local y = menu.y + titleHeight + buttonHeight + (buttonHeight * multiplier) - buttonHeight / 2
-		local backgroundColor = nil
-		local textColor = nil
-		local subTextColor = nil
-		local shadow = false
+	local backgroundColor = nil
+	local textColor = nil
+	local subTextColor = nil
+	local shadow = false
 
-		if menu.currentOption == optionCount then
-			backgroundColor = menu.focusColor
-			textColor = menu.focusTextColor
-			subTextColor = menu.focusTextColor
-		else
-			backgroundColor = menu.backgroundColor
-			textColor = menu.textColor
-			subTextColor = menu.subTextColor
-			shadow = true
-		end
+	if menu.currentOption == optionCount then
+		backgroundColor = menu.focusColor
+		textColor = menu.focusTextColor
+		subTextColor = menu.focusTextColor
+	else
+		backgroundColor = menu.backgroundColor
+		textColor = menu.textColor
+		subTextColor = menu.subTextColor
+		shadow = true
+	end
 
-		drawRect(x, y, menu.width, buttonHeight, backgroundColor)
+	local x = menu.x + menu.width / 2
+	local y = menu.y + titleHeight + buttonHeight + (buttonHeight * currentIndex) - buttonHeight / 2
 
-		setTextParams(buttonFont, textColor, buttonScale, false, shadow)
-		drawText(text, menu.x + buttonTextXOffset, y - (buttonHeight / 2) + buttonTextYOffset)
+	drawRect(x, y, menu.width, buttonHeight, backgroundColor)
 
-		if subText then
-			setTextParams(buttonFont, subTextColor, buttonScale, false, shadow, true)
-			drawText(subText, menu.x + buttonTextXOffset, y - buttonHeight / 2 + buttonTextYOffset)
-		end
+	setTextParams(buttonFont, textColor, buttonScale, false, shadow)
+	drawText(text, menu.x + buttonTextXOffset, y - (buttonHeight / 2) + buttonTextYOffset)
+
+	if subText then
+		setTextParams(buttonFont, subTextColor, buttonScale, false, shadow, true)
+		drawText(subText, menu.x + buttonTextXOffset, y - buttonHeight / 2 + buttonTextYOffset)
 	end
 end
 
@@ -313,9 +319,14 @@ function WarMenu.CloseMenu()
 end
 
 function WarMenu.ToolTip(text, width, flipHorizontal)
-	width = width or toolTipWidth
-
 	local menu = menus[currentMenu]
+
+	local currentIndex = getCurrentIndex(menu)
+	if not currentIndex then
+		return
+	end
+
+	width = width or toolTipWidth
 
 	local x = nil
 	if not flipHorizontal then
@@ -324,26 +335,17 @@ function WarMenu.ToolTip(text, width, flipHorizontal)
 		x = menu.x - width / 2 - buttonTextXOffset
 	end
 
-	local multiplier = nil
-	if menu.currentOption <= menu.maxOptionCount and optionCount <= menu.maxOptionCount then
-		multiplier = optionCount
-	elseif optionCount > menu.currentOption - menu.maxOptionCount and optionCount <= menu.currentOption then
-		multiplier = optionCount - (menu.currentOption - menu.maxOptionCount)
-	end
+	local textX = x - (width / 2) + buttonTextXOffset
+	setTextParams(buttonFont, menu.textColor, buttonScale, false, true, false, textX, textX + width - (buttonTextYOffset * 2))
+	local linesCount = getLinesCount(text, textX, menu.y)
 
-	if multiplier then
-		local textX = x - (width / 2) + buttonTextXOffset
-		setTextParams(buttonFont, menu.textColor, buttonScale, false, true, false, textX, textX + width - (buttonTextYOffset * 2))
-		local linesCount = getLinesCount(text, textX, menu.y)
+	local height = GetTextScaleHeight(buttonScale, buttonFont) * (linesCount + 1) + buttonTextYOffset
+	local y = menu.y + titleHeight + (buttonHeight * currentIndex) + height / 2
 
-		local height = GetTextScaleHeight(buttonScale, buttonFont) * (linesCount + 1) + buttonTextYOffset
-		local y = menu.y + titleHeight + (buttonHeight * multiplier) + height / 2
+	drawRect(x, y, width, height, menu.backgroundColor)
 
-		drawRect(x, y, width, height, menu.backgroundColor)
-
-		y = y - (height / 2) + buttonTextYOffset
-		drawText(text, textX, y)
-	end
+	y = y - (height / 2) + buttonTextYOffset
+	drawText(text, textX, y)
 end
 
 function WarMenu.Button(text, subText)
@@ -379,24 +381,19 @@ function WarMenu.Button(text, subText)
 end
 
 function WarMenu.SpriteButton(text, dict, name, r, g, b, a)
+	local menu = menus[currentMenu]
+
+	local currentIndex = getCurrentIndex(menu)
+	if not currentIndex then
+		return
+	end
+
 	local selected = WarMenu.Button(text)
 
 	if not HasStreamedTextureDictLoaded(dict) then
 		RequestStreamedTextureDict(dict)
 	end
-
-	local menu = menus[currentMenu]
-
-	local multiplier = nil
-	if menu.currentOption <= menu.maxOptionCount and optionCount <= menu.maxOptionCount then
-		multiplier = optionCount
-	elseif optionCount > menu.currentOption - menu.maxOptionCount and optionCount <= menu.currentOption then
-		multiplier = optionCount - (menu.currentOption - menu.maxOptionCount)
-	end
-
-	if multiplier then
-		DrawSprite(dict, name, menu.x + menu.width - spriteWidth / 2 - buttonSpriteXOffset, menu.y + titleHeight + buttonHeight + (buttonHeight * multiplier) - spriteHeight / 2 + buttonSpriteYOffset, spriteWidth, spriteHeight, 0., r or 255, g or 255, b or 255, a or 255)
-	end
+	DrawSprite(dict, name, menu.x + menu.width - spriteWidth / 2 - buttonSpriteXOffset, menu.y + titleHeight + buttonHeight + (buttonHeight * (currentIndex + 1)) - spriteHeight / 2 + buttonSpriteYOffset, spriteWidth, spriteHeight, 0., r or 255, g or 255, b or 255, a or 255)
 
 	return selected
 end
