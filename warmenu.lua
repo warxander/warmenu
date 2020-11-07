@@ -394,7 +394,9 @@ function WarMenu.SpriteButton(text, dict, name, r, g, b, a)
 		multiplier = optionCount - (menu.currentOption - menu.maxOptionCount)
 	end
 
-	DrawSprite(dict, name, menu.x + menu.width - spriteWidth / 2 - buttonSpriteXOffset, menu.y + titleHeight + buttonHeight + (buttonHeight * multiplier) - spriteHeight / 2 + buttonSpriteYOffset, spriteWidth, spriteHeight, 0., r or 255, g or 255, b or 255, a or 255)
+	if multiplier then
+		DrawSprite(dict, name, menu.x + menu.width - spriteWidth / 2 - buttonSpriteXOffset, menu.y + titleHeight + buttonHeight + (buttonHeight * multiplier) - spriteHeight / 2 + buttonSpriteYOffset, spriteWidth, spriteHeight, 0., r or 255, g or 255, b or 255, a or 255)
+	end
 
 	return selected
 end
