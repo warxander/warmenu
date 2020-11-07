@@ -334,26 +334,23 @@ function WarMenu.ToolTip(text, width, flipHorizontal)
 end
 
 function WarMenu.Button(text, subText)
+	optionCount = optionCount + 1
+
+	drawButton(text, subText)
+
+	local pressed = false
+
 	local menu = menus[currentMenu]
-
-	if menu then
-		optionCount = optionCount + 1
-
-		local isCurrent = menu.currentOption == optionCount
-
-		drawButton(text, subText)
-
-		if isCurrent then
-			if currentKey == keys.select then
-				PlaySoundFrontend(-1, menu.buttonPressedSound.name, menu.buttonPressedSound.set, true)
-				return true
-			elseif currentKey == keys.left or currentKey == keys.right then
-				PlaySoundFrontend(-1, 'NAV_UP_DOWN', 'HUD_FRONTEND_DEFAULT_SOUNDSET', true)
-			end
+	if menu.currentOption == optionCount then
+		if currentKey == keys.select then
+			pressed = true
+			PlaySoundFrontend(-1, menu.buttonPressedSound.name, menu.buttonPressedSound.set, true)
+		elseif currentKey == keys.left or currentKey == keys.right then
+			PlaySoundFrontend(-1, 'NAV_UP_DOWN', 'HUD_FRONTEND_DEFAULT_SOUNDSET', true)
 		end
 	end
 
-	return false
+	return pressed
 end
 
 function WarMenu.SpriteButton(text, dict, name, r, g, b, a)
@@ -364,28 +361,26 @@ function WarMenu.SpriteButton(text, dict, name, r, g, b, a)
 		return
 	end
 
-	local selected = WarMenu.Button(text)
+	local pressed = WarMenu.Button(text)
 
 	if not HasStreamedTextureDictLoaded(dict) then
 		RequestStreamedTextureDict(dict)
 	end
-	DrawSprite(dict, name, menu.x + menu.width - spriteWidth / 2 - buttonSpriteXOffset, menu.y + titleHeight + buttonHeight + (buttonHeight * (currentIndex + 1)) - spriteHeight / 2 + buttonSpriteYOffset, spriteWidth, spriteHeight, 0., r or 255, g or 255, b or 255, a or 255)
+	DrawSprite(dict, name, menu.x + menu.width - spriteWidth / 2 - buttonSpriteXOffset, menu.y + titleHeight + buttonHeight + (buttonHeight * currentIndex) - spriteHeight / 2 + buttonSpriteYOffset, spriteWidth, spriteHeight, 0., r or 255, g or 255, b or 255, a or 255)
 
-	return selected
+	return pressed
 end
 
 function WarMenu.MenuButton(text, id, subText)
-	if menus[id] then
-		if WarMenu.Button(text, subText) then
-			setMenuVisible(currentMenu, false)
-			setMenuProperty(currentMenu, 'currentOption', optionCount)
-			setMenuVisible(id, true, true)
+	local pressed = WarMenu.Button(text, subText)
 
-			return true
-		end
+	if pressed then
+		setMenuVisible(currentMenu, false)
+		setMenuProperty(currentMenu, 'currentOption', optionCount)
+		setMenuVisible(id, true, true)
 	end
 
-	return false
+	return pressed
 end
 
 function WarMenu.CheckBox(text, checked, callback)
@@ -396,33 +391,31 @@ function WarMenu.CheckBox(text, checked, callback)
 		name = checked and 'shop_box_tick' or 'shop_box_blank'
 	end
 
-	if WarMenu.SpriteButton(text, 'commonmenu', name) then
+	local pressed = WarMenu.SpriteButton(text, 'commonmenu', name)
+
+	if pressed then
 		checked = not checked
 		if callback then callback(checked) end
-
-		return true
 	end
 
-	return false
+	return pressed
 end
 
 function WarMenu.ComboBox(text, items, currentIndex, selectedIndex, callback)
 	local itemsCount = #items
 	local selectedItem = items[currentIndex]
-	local isCurrent = menus[currentMenu].currentOption == (optionCount + 1)
+	local isCurrent = menus[currentMenu].currentOption == optionCount + 1
 	selectedIndex = selectedIndex or currentIndex
 
 	if itemsCount > 1 and isCurrent then
 		selectedItem = '← '..tostring(selectedItem)..' →'
 	end
 
-	if WarMenu.Button(text, selectedItem) then
-		selectedIndex = currentIndex
-		if callback then callback(currentIndex, selectedIndex) end
-		return true, currentIndex
-	end
+	local pressed = WarMenu.Button(text, selectedItem)
 
-	if isCurrent then
+	if pressed then
+		selectedIndex = currentIndex
+	elseif isCurrent then
 		if currentKey == keys.left then
 			if currentIndex > 1 then currentIndex = currentIndex - 1 else currentIndex = itemsCount end
 		elseif currentKey == keys.right then
@@ -431,7 +424,7 @@ function WarMenu.ComboBox(text, items, currentIndex, selectedIndex, callback)
 	end
 
 	if callback then callback(currentIndex, selectedIndex) end
-	return false, currentIndex
+	return pressed, currentIndex
 end
 
 function WarMenu.Display()
