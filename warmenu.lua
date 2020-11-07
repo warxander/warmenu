@@ -163,7 +163,7 @@ local function drawButton(text, subText)
 		local shadow = false
 
 		if menu.currentOption == optionCount then
-			backgroundColor = menu.focusBackgroundColor
+			backgroundColor = menu.focusColor
 			textColor = menu.focusTextColor
 			subTextColor = menu.focusTextColor
 		else
@@ -221,7 +221,7 @@ function WarMenu.CreateMenu(id, title)
 	menu.textColor = { 255, 255, 255, 255 }
 	menu.subTextColor = { 189, 189, 189, 255 }
 	menu.focusTextColor = { 0, 0, 0, 255 }
-	menu.focusBackgroundColor = { 245, 245, 245, 255 }
+	menu.focusColor = { 245, 245, 245, 255 }
 	menu.backgroundColor = { 0, 0, 0, 160 }
 	menu.subTitleBackgroundColor = { 0, 0, 0, 255 }
 
@@ -251,7 +251,7 @@ function WarMenu.CreateSubMenu(id, parent, subTitle)
 		menu.textColor = parentMenu.textColor
 		menu.subTextColor = parentMenu.subTextColor
 		menu.focusTextColor = parentMenu.focusTextColor
-		menu.focusBackgroundColor = parentMenu.focusBackgroundColor
+		menu.focusColor = parentMenu.focusColor
 		menu.backgroundColor = parentMenu.backgroundColor
 		menu.subTitleBackgroundColor = parentMenu.subTitleBackgroundColor
 	else
@@ -598,7 +598,7 @@ function WarMenu.SetMenuSubTextColor(id, r, g, b, a)
 end
 
 function WarMenu.SetMenuFocusColor(id, r, g, b, a)
-	setMenuProperty(id, 'menuFocusColor', { r, g, b, a or menus[id].menuFocusColor[4] })
+	setMenuProperty(id, 'focusColor', { r, g, b, a or menus[id].focusColor[4] })
 end
 
 function WarMenu.SetMenuFocusTextColor(id, r, g, b, a)
