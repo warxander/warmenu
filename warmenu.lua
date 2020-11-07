@@ -1,7 +1,14 @@
 WarMenu = { }
 WarMenu.__index = WarMenu
 
+-- Deprecated
 WarMenu.debug = false
+function WarMenu.SetDebugEnabled(enabled)
+end
+function WarMenu.IsDebugEnabled()
+	return false
+end
+---
 
 local menus = { }
 local keys = { up = 188, down = 187, left = 189, right = 190, select = 201, back = 202 }
@@ -27,16 +34,9 @@ local buttonTextYOffset = 0.005
 local buttonSpriteXOffset = 0.002
 local buttonSpriteYOffset = 0.005
 
-local function debugPrint(text)
-	if WarMenu.debug then
-		Citizen.Trace('[WarMenu] '..tostring(text)..'\n')
-	end
-end
-
 local function setMenuProperty(id, property, value)
 	if id and menus[id] then
 		menus[id][property] = value
-		debugPrint(id..' menu property changed: { '..tostring(property)..', '..tostring(value)..' }')
 	end
 end
 
@@ -191,14 +191,6 @@ local function drawButton(text, subText)
 	end
 end
 
-function WarMenu.SetDebugEnabled(enabled)
-	WarMenu.debug = enabled
-end
-
-function WarMenu.IsDebugEnabled()
-	return WarMenu.debug
-end
-
 function WarMenu.CreateMenu(id, title)
 	-- Default settings
 	local menu = { }
@@ -234,35 +226,33 @@ function WarMenu.CreateMenu(id, title)
 	menu.buttonPressedSound = { name = 'SELECT', set = 'HUD_FRONTEND_DEFAULT_SOUNDSET' } --https://pastebin.com/0neZdsZ5
 
 	menus[id] = menu
-	debugPrint(tostring(id)..' menu created')
 end
 
 function WarMenu.CreateSubMenu(id, parent, subTitle)
 	local parentMenu = menus[parent]
-
-	if parentMenu then
-		WarMenu.CreateMenu(id, parentMenu.title)
-
-		local menu = menus[id]
-		menu.previousMenu = parent
-		menu.subTitle = subTitle and string.upper(subTitle) or string.upper(parentMenu.subTitle)
-		menu.x = parentMenu.x
-		menu.y = parentMenu.y
-		menu.maxOptionCount = parentMenu.maxOptionCount
-		menu.titleFont = parentMenu.titleFont
-		menu.titleColor = parentMenu.titleColor
-		menu.titleBackgroundColor = parentMenu.titleBackgroundColor
-		menu.titleBackgroundSprite = parentMenu.titleBackgroundSprite
-		menu.subTitleColor = parentMenu.subTitleColor
-		menu.textColor = parentMenu.textColor
-		menu.subTextColor = parentMenu.subTextColor
-		menu.focusTextColor = parentMenu.focusTextColor
-		menu.focusColor = parentMenu.focusColor
-		menu.backgroundColor = parentMenu.backgroundColor
-		menu.subTitleBackgroundColor = parentMenu.subTitleBackgroundColor
-	else
-		debugPrint('Failed to create '..tostring(id)..' submenu: '..tostring(parent)..' parent menu doesn\'t exist')
+	if not parentMenu then
+		return
 	end
+
+	WarMenu.CreateMenu(id, parentMenu.title)
+
+	local menu = menus[id]
+	menu.previousMenu = parent
+	menu.subTitle = subTitle and string.upper(subTitle) or string.upper(parentMenu.subTitle)
+	menu.x = parentMenu.x
+	menu.y = parentMenu.y
+	menu.maxOptionCount = parentMenu.maxOptionCount
+	menu.titleFont = parentMenu.titleFont
+	menu.titleColor = parentMenu.titleColor
+	menu.titleBackgroundColor = parentMenu.titleBackgroundColor
+	menu.titleBackgroundSprite = parentMenu.titleBackgroundSprite
+	menu.subTitleColor = parentMenu.subTitleColor
+	menu.textColor = parentMenu.textColor
+	menu.subTextColor = parentMenu.subTextColor
+	menu.focusTextColor = parentMenu.focusTextColor
+	menu.focusColor = parentMenu.focusColor
+	menu.backgroundColor = parentMenu.backgroundColor
+	menu.subTitleBackgroundColor = parentMenu.subTitleBackgroundColor
 end
 
 function WarMenu.CurrentMenu()
@@ -273,9 +263,6 @@ function WarMenu.OpenMenu(id)
 	if id and menus[id] then
 		PlaySoundFrontend(-1, 'SELECT', 'HUD_FRONTEND_DEFAULT_SOUNDSET', true)
 		setMenuVisible(id, true)
-		debugPrint(tostring(id)..' menu opened')
-	else
-		debugPrint('Failed to open '..tostring(id)..' menu: it doesn\'t exist')
 	end
 end
 
@@ -309,11 +296,9 @@ function WarMenu.CloseMenu()
 			optionCount = 0
 			currentMenu = nil
 			currentKey = nil
-			debugPrint(tostring(currentMenu)..' menu closed')
 			PlaySoundFrontend(-1, 'QUIT', 'HUD_FRONTEND_DEFAULT_SOUNDSET', true)
 		else
 			menu.aboutToBeClosed = true
-			debugPrint(tostring(currentMenu)..' menu about to be closed')
 		end
 	end
 end
@@ -349,12 +334,8 @@ function WarMenu.ToolTip(text, width, flipHorizontal)
 end
 
 function WarMenu.Button(text, subText)
-	local buttonText = text
-	if subText then
-		buttonText = '{ '..tostring(buttonText)..', '..tostring(subText)..' }'
-	end
-
 	local menu = menus[currentMenu]
+
 	if menu then
 		optionCount = optionCount + 1
 
@@ -365,19 +346,14 @@ function WarMenu.Button(text, subText)
 		if isCurrent then
 			if currentKey == keys.select then
 				PlaySoundFrontend(-1, menu.buttonPressedSound.name, menu.buttonPressedSound.set, true)
-				debugPrint(buttonText..' button pressed')
 				return true
 			elseif currentKey == keys.left or currentKey == keys.right then
 				PlaySoundFrontend(-1, 'NAV_UP_DOWN', 'HUD_FRONTEND_DEFAULT_SOUNDSET', true)
 			end
 		end
-
-		return false
-	else
-		debugPrint('Failed to create '..buttonText..' button: '..tostring(currentMenu)..' menu doesn\'t exist')
-
-		return false
 	end
+
+	return false
 end
 
 function WarMenu.SpriteButton(text, dict, name, r, g, b, a)
@@ -407,8 +383,6 @@ function WarMenu.MenuButton(text, id, subText)
 
 			return true
 		end
-	else
-		debugPrint('Failed to create '..tostring(text)..' menu button: '..tostring(id)..' submenu doesn\'t exist')
 	end
 
 	return false
@@ -424,7 +398,6 @@ function WarMenu.CheckBox(text, checked, callback)
 
 	if WarMenu.SpriteButton(text, 'commonmenu', name) then
 		checked = not checked
-		debugPrint(tostring(text)..' checkbox changed to '..tostring(checked))
 		if callback then callback(checked) end
 
 		return true
