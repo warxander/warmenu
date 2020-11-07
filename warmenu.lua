@@ -601,6 +601,10 @@ function WarMenu.SetMenuFocusColor(id, r, g, b, a)
 	setMenuProperty(id, 'menuFocusColor', { r, g, b, a or menus[id].menuFocusColor[4] })
 end
 
+function WarMenu.SetMenuFocusTextColor(id, r, g, b, a)
+	setMenuProperty(id, 'focusTextColor', { r, g, b, a or menus[id].focusTextColor[4] })
+end
+
 function WarMenu.SetMenuButtonPressedSound(id, name, set)
 	setMenuProperty(id, 'buttonPressedSound', { name = name, set = set })
 end

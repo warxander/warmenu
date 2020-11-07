@@ -137,6 +137,7 @@ WarMenu.SetMenuBackgroundColor(id, r, g, b, a)
 WarMenu.SetMenuTextColor(id, r, g, b, a)
 WarMenu.SetMenuSubTextColor(id, r, g, b, a)
 WarMenu.SetMenuFocusColor(id, r, g, b, a)
+WarMenu.SetMenuFocusTextColor(id, r, g, b, a)
 
 WarMenu.SetMenuButtonPressedSound(id, name, set) -- https://pastebin.com/0neZdsZ5
 ```
