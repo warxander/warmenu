@@ -16,76 +16,6 @@ Inspired by @MrDaGree  [GUI Management (Maker) | Mod Menu Style Menus (uhh.. ya)
 * It sounds
 
 
-## Usage
-```lua
-Citizen.CreateThread(function()
-	WarMenu.CreateMenu('test', 'Test title')
-	WarMenu.CreateSubMenu('closeMenu', 'test', 'Are you sure?')
-
-	local checkBoxState = false
-
-	local comboBoxItems = { 'Foo', 'Bar' }
-	local comboBoxIndex = 1
-
-	while true do
-		if not WarMenu.IsAnyMenuOpened() then
-			if IsControlJustReleased(0, 244) then
-				WarMenu.OpenMenu('test')
-			end
-		elseif WarMenu.IsMenuOpened('test') then
-			-- Basic control usage
-			if WarMenu.Button('Simple Button') then
-			end
-
-			if WarMenu.SpriteButton('Sprite Button', 'commonmenu', 'shop_gunclub_icon_b') then
-			end
-
-			if WarMenu.CheckBox('Checkbox', checkBoxState) then
-				checkBoxState = not checkBoxState
-			end
-
-			local _, index = WarMenu.ComboBox('Combobox', comboBoxItems, comboBoxIndex)
-			if comboBoxIndex ~= index then
-				comboBoxIndex = index
-			end
-
-			-- Advanced control usage
-			WarMenu.Button('Advanced Button')
-			if WarMenu.IsItemHovered() then
-				WarMenu.ToolTip('This is tooltip example.')
-				if WarMenu.IsItemSelected() then
-				end
-			end
-
-			local selected, index = WarMenu.ComboBox('Advanced Combobox', comboBoxItems, comboBoxIndex)
-			if WarMenu.IsItemHovered() then
-				if selected and comboBoxIndex ~= index then
-					comboBoxIndex = index
-				end
-			end
-
-			-- Menu button example
-			if WarMenu.MenuButton('Exit', 'closeMenu') then
-			end
-
-			WarMenu.Display()
-		elseif WarMenu.IsMenuOpened('closeMenu') then
-			if WarMenu.Button('Yes') then
-				WarMenu.CloseMenu()
-			end
-
-			if WarMenu.MenuButton('No', 'test') then
-			end
-
-			WarMenu.Display()
-		end
-
-		Citizen.Wait(0)
-	end
-end)
-```
-
-
 ## API
 ```lua
 WarMenu.CreateMenu(id, title)
@@ -116,26 +46,27 @@ WarMenu.Display() -- Processing key events and menu logic, use it in loop
 
 
 -- Customizable options
-WarMenu.SetMenuWidth(id, width) -- [0.0..1.0]
+--- Menu
 WarMenu.SetMenuX(id, x) -- [0.0..1.0] top left corner
 WarMenu.SetMenuY(id, y) -- [0.0..1.0] top
+WarMenu.SetMenuWidth(id, width) -- [0.0..1.0]
+WarMenu.SetMenuTitle(id, title)
+WarMenu.SetMenuSubTitle(id, text) -- it will uppercase automatically
 WarMenu.SetMenuMaxOptionCountOnScreen(id, count) -- 10 by default
 
-WarMenu.SetMenuTitle(id, title)
+--- Style
 WarMenu.SetMenuTitleColor(id, r, g, b, a)
 WarMenu.SetMenuSubTitleColor(id, r, g, b, a)
+
 WarMenu.SetMenuTitleBackgroundColor(id, r, g, b, a)
 -- or
 WarMenu.SetMenuTitleBackgroundSprite(id, textureDict, textureName)
-
-WarMenu.SetMenuSubTitle(id, text) -- it will uppercase automatically
 
 WarMenu.SetMenuBackgroundColor(id, r, g, b, a)
 WarMenu.SetMenuTextColor(id, r, g, b, a)
 WarMenu.SetMenuSubTextColor(id, r, g, b, a)
 WarMenu.SetMenuFocusColor(id, r, g, b, a)
 WarMenu.SetMenuFocusTextColor(id, r, g, b, a)
-
 WarMenu.SetMenuButtonPressedSound(id, name, set) -- https://pastebin.com/0neZdsZ5
 ```
 
