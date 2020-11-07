@@ -356,12 +356,12 @@ end
 function WarMenu.SpriteButton(text, dict, name, r, g, b, a)
 	local menu = menus[currentMenu]
 
+	local pressed = WarMenu.Button(text)
+
 	local currentIndex = getCurrentIndex(menu)
 	if not currentIndex then
 		return
 	end
-
-	local pressed = WarMenu.Button(text)
 
 	if not HasStreamedTextureDictLoaded(dict) then
 		RequestStreamedTextureDict(dict)
