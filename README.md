@@ -72,6 +72,14 @@ WarMenu.SetMenuButtonPressedSound(id, name, set) -- https://pastebin.com/0neZdsZ
 
 
 ## Changelog
+### 1.3
+* Added Demo Menu
+* Added WarMenu.SetMenuFocusTextColor API
+* Fixed WarMenu.SetMenuFocusColor API
+* Fixed WarMenu.SpriteButton edge case
+* Improved performance and memory consumption
+* Removed debug prints
+* Improved code style
 ### 1.2
 * Added `WarMenu.SpriteButton` API
 ### 1.1
