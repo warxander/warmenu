@@ -40,35 +40,30 @@ local function setMenuProperty(id, property, value)
 	end
 end
 
-local function isMenuVisible(id)
-	if id and menus[id] then
-		return menus[id].visible
-	else
-		return false
-	end
-end
-
 local function setMenuVisible(id, visible, holdCurrentOption)
-	if id and menus[id] then
-		local isMenuVisible = isMenuVisible(id)
-		if isMenuVisible == visible then
+	if visible then
+		if currentMenu == id then
 			return
 		end
-
-		setMenuProperty(id, 'visible', visible)
-
-		if visible then
-			if not currentMenu then
-				setMenuProperty(id, 'currentOption', 1)
-			else
-				setMenuVisible(currentMenu, false)
-				if not holdCurrentOption then
-					setMenuProperty(currentMenu, 'currentOption', 1)
-				end
-			end
-
-			currentMenu = id
+	else
+		if currentMenu ~= id then
+			return
 		end
+	end
+
+	if visible then
+		if not currentMenu then
+			setMenuProperty(id, 'currentOption', 1)
+		else
+			setMenuVisible(currentMenu, false)
+			if not holdCurrentOption then
+				setMenuProperty(currentMenu, 'currentOption', 1)
+			end
+		end
+
+		currentMenu = id
+	else
+		currentMenu = nil
 	end
 end
 
@@ -203,8 +198,6 @@ function WarMenu.CreateMenu(id, title)
 	menu.title = title
 	menu.subTitle = 'INTERACTION MENU'
 
-	menu.visible = false
-
 	menu.previousMenu = nil
 
 	menu.aboutToBeClosed = false
@@ -272,15 +265,11 @@ function WarMenu.OpenMenu(id)
 end
 
 function WarMenu.IsMenuOpened(id)
-	return isMenuVisible(id)
+	return currentMenu == id
 end
 
 function WarMenu.IsAnyMenuOpened()
-	for id, _ in pairs(menus) do
-		if isMenuVisible(id) then return true end
-	end
-
-	return false
+	return currentMenu ~= nil
 end
 
 function WarMenu.IsMenuAboutToBeClosed()
@@ -299,7 +288,6 @@ function WarMenu.CloseMenu()
 			menu.aboutToBeClosed = false
 			setMenuVisible(currentMenu, false)
 			optionCount = 0
-			currentMenu = nil
 			currentKey = nil
 			PlaySoundFrontend(-1, 'QUIT', 'HUD_FRONTEND_DEFAULT_SOUNDSET', true)
 		else
@@ -433,7 +421,7 @@ function WarMenu.ComboBox(text, items, currentIndex, selectedIndex, callback)
 end
 
 function WarMenu.Display()
-	if isMenuVisible(currentMenu) then
+	if currentMenu then
 		DisableControlAction(0, keys.left, true)
 		DisableControlAction(0, keys.up, true)
 		DisableControlAction(0, keys.down, true)
