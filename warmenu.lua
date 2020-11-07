@@ -124,37 +124,35 @@ end
 
 local function drawTitle()
 	local menu = menus[currentMenu]
-	if menu then
-		local x = menu.x + menu.width / 2
-		local y = menu.y + titleHeight / 2
 
-		if menu.titleBackgroundSprite then
-			DrawSprite(menu.titleBackgroundSprite.dict, menu.titleBackgroundSprite.name, x, y, menu.width, titleHeight, 0., 255, 255, 255, 255)
-		else
-			drawRect(x, y, menu.width, titleHeight, menu.titleBackgroundColor)
-		end
+	local x = menu.x + menu.width / 2
+	local y = menu.y + titleHeight / 2
 
-		setTextParams(menu.titleFont, menu.titleColor, titleScale, true)
-		drawText(menu.title, x, y - titleHeight / 2 + titleYOffset)
+	if menu.titleBackgroundSprite then
+		DrawSprite(menu.titleBackgroundSprite.dict, menu.titleBackgroundSprite.name, x, y, menu.width, titleHeight, 0., 255, 255, 255, 255)
+	else
+		drawRect(x, y, menu.width, titleHeight, menu.titleBackgroundColor)
 	end
+
+	setTextParams(menu.titleFont, menu.titleColor, titleScale, true)
+	drawText(menu.title, x, y - titleHeight / 2 + titleYOffset)
 end
 
 local function drawSubTitle()
 	local menu = menus[currentMenu]
-	if menu then
-		local x = menu.x + menu.width / 2
-		local y = menu.y + titleHeight + buttonHeight / 2
-		local subTitleColor = menu.subTitleColor or menu.titleBackgroundColor
 
-		drawRect(x, y, menu.width, buttonHeight, menu.subTitleBackgroundColor)
+	local x = menu.x + menu.width / 2
+	local y = menu.y + titleHeight + buttonHeight / 2
+	local subTitleColor = menu.subTitleColor or menu.titleBackgroundColor
 
-		setTextParams(buttonFont, subTitleColor, buttonScale, false)
-		drawText(menu.subTitle, menu.x + buttonTextXOffset, y - buttonHeight / 2 + buttonTextYOffset)
+	drawRect(x, y, menu.width, buttonHeight, menu.subTitleBackgroundColor)
 
-		if optionCount > menu.maxOptionCount then
-			setTextParams(buttonFont, subTitleColor, buttonScale, false, false, true)
-			drawText(tostring(menu.currentOption)..' / '..tostring(optionCount), menu.x + menu.width, y - buttonHeight / 2 + buttonTextYOffset)
-		end
+	setTextParams(buttonFont, subTitleColor, buttonScale, false)
+	drawText(menu.subTitle, menu.x + buttonTextXOffset, y - buttonHeight / 2 + buttonTextYOffset)
+
+	if optionCount > menu.maxOptionCount then
+		setTextParams(buttonFont, subTitleColor, buttonScale, false, false, true)
+		drawText(tostring(menu.currentOption)..' / '..tostring(optionCount), menu.x + menu.width, y - buttonHeight / 2 + buttonTextYOffset)
 	end
 end
 
