@@ -35,8 +35,13 @@ local buttonSpriteXOffset = 0.002
 local buttonSpriteYOffset = 0.005
 
 local function setMenuProperty(id, property, value)
-	if id and menus[id] then
-		menus[id][property] = value
+	if not id then
+		return
+	end
+
+	local menu = menus[id]
+	if menu then
+		menu[property] = value
 	end
 end
 
@@ -53,12 +58,12 @@ local function setMenuVisible(id, visible, holdCurrentOption)
 
 	if visible then
 		if not currentMenu then
-			setMenuProperty(id, 'currentOption', 1)
+			menus[id].currentOption = 1
 		else
-			setMenuVisible(currentMenu, false)
 			if not holdCurrentOption then
-				setMenuProperty(currentMenu, 'currentOption', 1)
+				menus[currentMenu].currentOption = 1
 			end
+			setMenuVisible(currentMenu, false)
 		end
 
 		currentMenu = id
@@ -368,8 +373,8 @@ function WarMenu.MenuButton(text, id, subText)
 	local pressed = WarMenu.Button(text, subText)
 
 	if pressed then
+		menus[currentMenu].currentOption = optionCount
 		setMenuVisible(currentMenu, false)
-		setMenuProperty(currentMenu, 'currentOption', optionCount)
 		setMenuVisible(id, true, true)
 	end
 
