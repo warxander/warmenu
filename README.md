@@ -31,6 +31,7 @@ WarMenu.CloseMenu()
 
 -- Controls
 WarMenu.Button(text, subText)
+WarMenu.InputButton(text, windowTitleEntry, defaultText, maxLength, subText)
 WarMenu.SpriteButton(text, dict, name, r, g, b, a)
 WarMenu.MenuButton(text, id, subText)
 WarMenu.CheckBox(text, boolState)

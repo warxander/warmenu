@@ -357,6 +357,31 @@ function WarMenu.SpriteButton(text, dict, name, r, g, b, a)
 	return pressed
 end
 
+function WarMenu.InputButton(text, windowTitleEntry, defaultText, maxLength, subText)
+	local pressed = WarMenu.Button(text, subText)
+	local inputText = nil
+
+	if pressed then
+		DisplayOnscreenKeyboard(1, windowTitleEntry or 'FMMC_MPM_NA', '', defaultText or '', '', '', '', maxLength or 255)
+
+		while true do
+			DisableAllControlActions(0)
+
+			local status = UpdateOnscreenKeyboard()
+			if status == 2 then
+				break
+			elseif status == 1 then
+				inputText = GetOnscreenKeyboardResult()
+				break
+			end
+
+			Citizen.Wait(0)
+		end
+	end
+
+	return pressed, inputText
+end
+
 function WarMenu.MenuButton(text, id, subText)
 	local pressed = WarMenu.Button(text, subText)
 
@@ -420,7 +445,6 @@ function WarMenu.Display()
 		DisableControlAction(0, keys.down, true)
 		DisableControlAction(0, keys.right, true)
 		DisableControlAction(0, keys.back, true)
-		DisableControlAction(0, keys.select, true)
 
 		if currentMenu.aboutToBeClosed then
 			WarMenu.CloseMenu()
@@ -452,7 +476,7 @@ function WarMenu.Display()
 				currentKey = keys.left
 			elseif IsDisabledControlJustReleased(0, keys.right) then
 				currentKey = keys.right
-			elseif IsDisabledControlJustReleased(0, keys.select) then
+			elseif IsControlJustReleased(0, keys.select) then
 				currentKey = keys.select
 			elseif IsDisabledControlJustReleased(0, keys.back) then
 				if menus[currentMenu.previousMenu] then

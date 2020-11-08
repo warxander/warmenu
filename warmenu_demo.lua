@@ -16,6 +16,8 @@ else
 	local _altMaxOption = false
 
 	-- Controls
+	local _inputText = nil
+
 	local _altSprite = false
 
 	local _comboBoxItems = { 'F', 'I', 'V', 'E', 'M' }
@@ -62,7 +64,14 @@ else
 			elseif WarMenu.IsMenuOpened('demo_menu') then
 				WarMenu.Display()
 			elseif WarMenu.IsMenuOpened('demo_controls') then
-				WarMenu.Button('Button')
+				WarMenu.Button('Button', 'Subtext')
+
+				local pressed, inputText = WarMenu.InputButton('Input Button', nil, _inputText)
+				if pressed then
+					if inputText then
+						_inputText = inputText
+					end
+				end
 
 				if WarMenu.SpriteButton('Sprite Button', 'commonmenu', _altSprite and 'shop_gunclub_icon_b' or 'shop_garage_icon_b') then
 					_altSprite = not _altSprite
