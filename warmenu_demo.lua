@@ -60,9 +60,9 @@ else
 				WarMenu.MenuButton('Style', 'demo_style')
 				WarMenu.MenuButton('Exit', 'demo_exit')
 
-				WarMenu.Display()
+				WarMenu.End()
 			elseif WarMenu.IsMenuOpened('demo_menu') then
-				WarMenu.Display()
+				WarMenu.End()
 			elseif WarMenu.IsMenuOpened('demo_controls') then
 				WarMenu.Button('Button', 'Subtext')
 
@@ -96,9 +96,9 @@ else
 					_comboBoxIndex = comboBoxIndex
 				end
 
-				WarMenu.Display()
+				WarMenu.End()
 			elseif WarMenu.IsMenuOpened('demo_style') then
-				WarMenu.Display()
+				WarMenu.End()
 			elseif WarMenu.IsMenuOpened('demo_exit') then
 				WarMenu.MenuButton('No', 'demo')
 
@@ -106,7 +106,7 @@ else
 					WarMenu.CloseMenu()
 				end
 
-				WarMenu.Display()
+				WarMenu.End()
 			else
 				return
 			end

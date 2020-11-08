@@ -491,6 +491,7 @@ function WarMenu.Display()
 		end
 	end
 end
+WarMenu.End = WarMenu.Display
 
 function WarMenu.CurrentOption()
 	if currentMenu and optionCount ~= 0 then

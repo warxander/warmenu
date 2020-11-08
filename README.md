@@ -44,7 +44,7 @@ WarMenu.IsItemHovered()
 WarMenu.IsItemSelected()
 -- See Usage section for more details
 
-WarMenu.Display() -- Processing key events and menu logic, use it in loop
+WarMenu.End() -- Processing key events and menu logic, use it in loop
 
 
 -- Customizable options
