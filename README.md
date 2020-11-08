@@ -18,8 +18,9 @@ Inspired by @MrDaGree  [GUI Management (Maker) | Mod Menu Style Menus (uhh.. ya)
 
 ## API
 ```lua
+--- * - optional parameters
 WarMenu.CreateMenu(id, title)
-WarMenu.CreateSubMenu(id, parent, subTitle)
+WarMenu.CreateSubMenu(id, parent, subTitle*)
 
 WarMenu.CurrentMenu() -- id
 
@@ -30,13 +31,13 @@ WarMenu.IsMenuAboutToBeClosed() -- return true if current menu will be closed in
 WarMenu.CloseMenu()
 
 -- Controls
-WarMenu.Button(text, subText)
-WarMenu.InputButton(text, windowTitleEntry, defaultText, maxLength, subText)
-WarMenu.SpriteButton(text, dict, name, r, g, b, a)
-WarMenu.MenuButton(text, id, subText)
+WarMenu.Button(text, subText*)
+WarMenu.InputButton(text, windowTitleEntry*, defaultText*, maxLength*, subText*)
+WarMenu.SpriteButton(text, dict, name, r*, g*, b*, a*)
+WarMenu.MenuButton(text, id, subText*)
 WarMenu.CheckBox(text, boolState)
 WarMenu.ComboBox(text, items, currentIndex)
-WarMenu.ToolTip(text, width, flipHorizontal)
+WarMenu.ToolTip(text, width*, flipHorizontal*)
 -- Use them in loop to draw
 -- They return true if were selected OR you can use functions below for more granual control
 WarMenu.IsItemHovered()
@@ -56,18 +57,18 @@ WarMenu.SetMenuSubTitle(id, text) -- it will uppercase automatically
 WarMenu.SetMenuMaxOptionCountOnScreen(id, count) -- 10 by default
 
 --- Style
-WarMenu.SetMenuTitleColor(id, r, g, b, a)
-WarMenu.SetMenuSubTitleColor(id, r, g, b, a)
+WarMenu.SetMenuTitleColor(id, r, g, b, a*)
+WarMenu.SetMenuSubTitleColor(id, r, g, b, a*)
 
-WarMenu.SetMenuTitleBackgroundColor(id, r, g, b, a)
+WarMenu.SetMenuTitleBackgroundColor(id, r, g, b, a*)
 -- or
 WarMenu.SetMenuTitleBackgroundSprite(id, textureDict, textureName)
 
-WarMenu.SetMenuBackgroundColor(id, r, g, b, a)
-WarMenu.SetMenuTextColor(id, r, g, b, a)
-WarMenu.SetMenuSubTextColor(id, r, g, b, a)
-WarMenu.SetMenuFocusColor(id, r, g, b, a)
-WarMenu.SetMenuFocusTextColor(id, r, g, b, a)
+WarMenu.SetMenuBackgroundColor(id, r, g, b, a*)
+WarMenu.SetMenuTextColor(id, r, g, b, a*)
+WarMenu.SetMenuSubTextColor(id, r, g, b, a*)
+WarMenu.SetMenuFocusColor(id, r, g, b, a*)
+WarMenu.SetMenuFocusTextColor(id, r, g, b, a*)
 WarMenu.SetMenuButtonPressedSound(id, name, set) -- https://pastebin.com/0neZdsZ5
 ```
 
