@@ -74,6 +74,11 @@ WarMenu.SetMenuButtonPressedSound(id, name, set) -- https://pastebin.com/0neZdsZ
 
 
 ## Changelog
+### 1.4
+* Added `WarMenu.InputButton` API
+* Improved performance
+* Improved key mapping
+* Marked optional parameters in API section
 ### 1.3
 * Added Demo Menu
 * Added `WarMenu.SetMenuFocusTextColor` API
