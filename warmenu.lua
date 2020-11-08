@@ -190,14 +190,14 @@ local function drawButton(text, subText)
 	end
 end
 
-function WarMenu.CreateMenu(id, title)
+function WarMenu.CreateMenu(id, title, subTitle)
 	-- Default settings
 	local menu = { }
 
 	menu.id = id
 
 	menu.title = title
-	menu.subTitle = 'INTERACTION MENU'
+	menu.subTitle = subTitle or 'INTERACTION MENU'
 
 	menu.previousMenu = nil
 

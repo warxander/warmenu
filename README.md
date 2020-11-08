@@ -19,7 +19,7 @@ Inspired by @MrDaGree  [GUI Management (Maker) | Mod Menu Style Menus (uhh.. ya)
 ## API
 ```lua
 --- * - optional parameters
-WarMenu.CreateMenu(id, title)
+WarMenu.CreateMenu(id, title, subTitle*)
 WarMenu.CreateSubMenu(id, parent, subTitle*)
 
 WarMenu.CurrentMenu() -- id

@@ -37,8 +37,7 @@ else
 	local _altFocusTextColor = false
 	local _altButtonSound = false
 
-	WarMenu.CreateMenu('demo', 'Demo Menu')
-	WarMenu.SetMenuSubTitle('demo', 'Thank you for using WarMenu')
+	WarMenu.CreateMenu('demo', 'Demo Menu', 'Thank you for using WarMenu')
 
 	WarMenu.CreateSubMenu('demo_menu', 'demo', 'Menu')
 	WarMenu.CreateSubMenu('demo_controls', 'demo', 'Controls')
