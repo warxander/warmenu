@@ -35,7 +35,7 @@ WarMenu.Button(text, subText*)
 WarMenu.InputButton(text, windowTitleEntry*, defaultText*, maxLength*, subText*)
 WarMenu.SpriteButton(text, dict, name, r*, g*, b*, a*)
 WarMenu.MenuButton(text, id, subText*)
-WarMenu.CheckBox(text, boolState)
+WarMenu.CheckBox(text, checked)
 WarMenu.ComboBox(text, items, currentIndex)
 WarMenu.ToolTip(text, width*, flipHorizontal*)
 -- Use them in loop to draw
