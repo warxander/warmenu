@@ -11,7 +11,7 @@ end
 ---
 
 local menus = { }
-local keys = { up = 188, down = 187, left = 189, right = 190, select = 201, back = 202 }
+local keys = { down = 187, up = 188, left = 189, right = 190, select = 191, back = 194 }
 local optionCount = 0
 
 local currentKey = nil
