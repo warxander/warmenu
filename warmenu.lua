@@ -241,6 +241,8 @@ function WarMenu.CreateSubMenu(id, parent, subTitle)
 	menu.subTitle = subTitle and string.upper(subTitle) or string.upper(parentMenu.subTitle)
 	menu.x = parentMenu.x
 	menu.y = parentMenu.y
+	menu.width = parentMenu.width
+	menu.currentOption = 1
 	menu.maxOptionCount = parentMenu.maxOptionCount
 	menu.titleFont = parentMenu.titleFont
 	menu.titleColor = parentMenu.titleColor
