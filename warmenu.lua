@@ -197,7 +197,7 @@ function WarMenu.CreateMenu(id, title, subTitle)
 	menu.id = id
 
 	menu.title = title
-	menu.subTitle = subTitle or 'INTERACTION MENU'
+	menu.subTitle = subTitle and string.upper(subTitle) or 'INTERACTION MENU'
 
 	menu.previousMenu = nil
 
