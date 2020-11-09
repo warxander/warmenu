@@ -85,7 +85,7 @@ local function setTextParams(font, color, scale, center, shadow, alignRight, wra
 	end
 
 	if center then
-		SetTextCentre(center)
+		SetTextCentre(true)
 	elseif alignRight then
 		SetTextRightJustify(true)
 	end
