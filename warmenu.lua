@@ -22,8 +22,8 @@ local toolTipWidth = 0.153
 local spriteWidth = 0.027
 local spriteHeight = spriteWidth * GetAspectRatio()
 
-local titleHeight = 0.11
-local titleYOffset = 0.03
+local titleHeight = 0.101
+local titleYOffset = 0.021
 local titleScale = 1.0
 
 local buttonHeight = 0.038
