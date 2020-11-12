@@ -194,34 +194,29 @@ function WarMenu.CreateMenu(id, title, subTitle)
 	-- Default settings
 	local menu = { }
 
+	-- Members
 	menu.id = id
-
+	menu.previousMenu = nil
+	menu.aboutToBeClosed = false
+	menu.currentOption = 1
 	menu.title = title
 	menu.subTitle = subTitle and string.upper(subTitle) or 'INTERACTION MENU'
 
-	menu.previousMenu = nil
-
-	menu.aboutToBeClosed = false
-
+	-- Style
 	menu.x = 0.0175
 	menu.y = 0.025
 	menu.width = 0.23
-
-	menu.currentOption = 1
 	menu.maxOptionCount = 10
-
 	menu.titleFont = 1
 	menu.titleColor = { 0, 0, 0, 255 }
 	menu.titleBackgroundColor = { 245, 127, 23, 255 }
 	menu.titleBackgroundSprite = nil
-
 	menu.textColor = { 255, 255, 255, 255 }
 	menu.subTextColor = { 189, 189, 189, 255 }
 	menu.focusTextColor = { 0, 0, 0, 255 }
 	menu.focusColor = { 245, 245, 245, 255 }
 	menu.backgroundColor = { 0, 0, 0, 160 }
 	menu.subTitleBackgroundColor = { 0, 0, 0, 255 }
-
 	menu.buttonPressedSound = { name = 'SELECT', set = 'HUD_FRONTEND_DEFAULT_SOUNDSET' } --https://pastebin.com/0neZdsZ5
 
 	menus[id] = menu
@@ -233,16 +228,14 @@ function WarMenu.CreateSubMenu(id, parent, subTitle)
 		return
 	end
 
-	WarMenu.CreateMenu(id, parentMenu.title)
+	WarMenu.CreateMenu(id, parentMenu.title, subTitle and string.upper(subTitle) or parentMenu.subTitle)
+	menu.previousMenu = parent
 
 	local menu = menus[id]
 
-	menu.previousMenu = parent
-	menu.subTitle = subTitle and string.upper(subTitle) or string.upper(parentMenu.subTitle)
 	menu.x = parentMenu.x
 	menu.y = parentMenu.y
 	menu.width = parentMenu.width
-	menu.currentOption = 1
 	menu.maxOptionCount = parentMenu.maxOptionCount
 	menu.titleFont = parentMenu.titleFont
 	menu.titleColor = parentMenu.titleColor
