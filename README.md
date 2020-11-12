@@ -19,8 +19,8 @@ Inspired by @MrDaGree  [GUI Management (Maker) | Mod Menu Style Menus (uhh.. ya)
 ## API
 ```lua
 --- * - optional parameters
-WarMenu.CreateMenu(id, title, subTitle*)
-WarMenu.CreateSubMenu(id, parent, subTitle*)
+WarMenu.CreateMenu(id, title, subTitle*, style*)
+WarMenu.CreateSubMenu(id, parent, subTitle*, style*)
 
 WarMenu.CurrentMenu() -- id
 
@@ -49,20 +49,25 @@ WarMenu.End() -- Processing key events and menu logic, use it in loop
 
 -- Customizable options
 --- Menu
+WarMenu.SetMenuTitle(id, title)
+WarMenu.SetMenuSubTitle(id, text) -- it will uppercase automatically
+
+--- Style
+--- Property name can be extracted from setter signature, i. e. 'SetMenuTitleColor' -> 'titleColor'
+--- Example: local style = { titleColor = { 255, 255, 255 }, maxOptionCountOnScreen = 7, buttonPressedSound = { name = 'name', set = 'set' } }
+WarMenu.SetMenuStyle(id, style)
+
 WarMenu.SetMenuX(id, x) -- [0.0..1.0] top left corner
 WarMenu.SetMenuY(id, y) -- [0.0..1.0] top
 WarMenu.SetMenuWidth(id, width) -- [0.0..1.0]
-WarMenu.SetMenuTitle(id, title)
-WarMenu.SetMenuSubTitle(id, text) -- it will uppercase automatically
 WarMenu.SetMenuMaxOptionCountOnScreen(id, count) -- 10 by default
 
---- Style
 WarMenu.SetMenuTitleColor(id, r, g, b, a*)
 WarMenu.SetMenuSubTitleColor(id, r, g, b, a*)
 
 WarMenu.SetMenuTitleBackgroundColor(id, r, g, b, a*)
 -- or
-WarMenu.SetMenuTitleBackgroundSprite(id, textureDict, textureName)
+WarMenu.SetMenuTitleBackgroundSprite(id, dict, name)
 
 WarMenu.SetMenuBackgroundColor(id, r, g, b, a*)
 WarMenu.SetMenuTextColor(id, r, g, b, a*)
