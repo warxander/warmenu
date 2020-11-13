@@ -324,6 +324,10 @@ function WarMenu.CloseMenu()
 end
 
 function WarMenu.ToolTip(text, width, flipHorizontal)
+	if not currentMenu then
+		return
+	end
+
 	local currentIndex = getCurrentIndex()
 	if not currentIndex then
 		return
@@ -352,6 +356,10 @@ function WarMenu.ToolTip(text, width, flipHorizontal)
 end
 
 function WarMenu.Button(text, subText)
+	if not currentMenu then
+		return
+	end
+
 	optionCount = optionCount + 1
 
 	drawButton(text, subText)
@@ -371,6 +379,10 @@ function WarMenu.Button(text, subText)
 end
 
 function WarMenu.SpriteButton(text, dict, name, r, g, b, a)
+	if not currentMenu then
+		return
+	end
+
 	local pressed = WarMenu.Button(text)
 
 	local currentIndex = getCurrentIndex()
@@ -387,6 +399,10 @@ function WarMenu.SpriteButton(text, dict, name, r, g, b, a)
 end
 
 function WarMenu.InputButton(text, windowTitleEntry, defaultText, maxLength, subText)
+	if not currentMenu then
+		return
+	end
+
 	local pressed = WarMenu.Button(text, subText)
 	local inputText = nil
 
@@ -412,6 +428,10 @@ function WarMenu.InputButton(text, windowTitleEntry, defaultText, maxLength, sub
 end
 
 function WarMenu.MenuButton(text, id, subText)
+	if not currentMenu then
+		return
+	end
+
 	local pressed = WarMenu.Button(text, subText)
 
 	if pressed then
@@ -424,6 +444,10 @@ function WarMenu.MenuButton(text, id, subText)
 end
 
 function WarMenu.CheckBox(text, checked, callback)
+	if not currentMenu then
+		return
+	end
+
 	local name = nil
 	if currentMenu.currentOption == optionCount + 1 then
 		name = checked and 'shop_box_tickb' or 'shop_box_blankb'
@@ -442,6 +466,10 @@ function WarMenu.CheckBox(text, checked, callback)
 end
 
 function WarMenu.ComboBox(text, items, currentIndex, selectedIndex, callback)
+	if not currentMenu then
+		return
+	end
+
 	local itemsCount = #items
 	local selectedItem = items[currentIndex]
 	local isCurrent = currentMenu.currentOption == optionCount + 1
