@@ -15,7 +15,7 @@ Inspired by [Dear ImGui](https://github.com/ocornut/imgui) and GTA V menu system
 * Demo menu
 
 ## Demo menu
-You can read its source code to understand how framework works
+You can read its source code to understand how framework works   
 To run it, just add `client_script @warmenu/warmenu_demo.lua` to any of your resources which are using WarMenu
 
 ## API
