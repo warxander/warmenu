@@ -79,6 +79,12 @@ WarMenu.SetMenuButtonPressedSound(id, name, set) -- https://pastebin.com/0neZdsZ
 
 
 ## Changelog
+### 1.5
+* Added styles support
+* Added `WarMenu.SetMenuStyle` API
+* Added `WarMenu.CreateMenu` subTitle parameter
+* Corrected title background aspect ratio
+* Fixed minor bugs
 ### 1.4
 * Added `WarMenu.InputButton` API
 * Improved performance
