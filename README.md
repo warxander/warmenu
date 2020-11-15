@@ -1,6 +1,5 @@
 # WarMenu
-Inspired by @MrDaGree  [GUI Management (Maker) | Mod Menu Style Menus (uhh.. ya)](https://forum.fivem.net/t/release-gui-management-maker-mod-menu-style-menus-uhh-ya)
-
+Inspired by [Dear ImGui](https://github.com/ocornut/imgui) and GTA V menu system
 
 ## How to Install
 1. Place it to `/resources` folder
@@ -10,11 +9,14 @@ Inspired by @MrDaGree  [GUI Management (Maker) | Mod Menu Style Menus (uhh.. ya)
 
 ## Features
 * Backward compatibility
-* Original GTA V look 'n' feel
-* Customize each menu separately
-* Create nested menus in one line
-* It sounds
+* GTA V-like look'n'feel
+* Rich menu style customization
+* Lots of built-in controls
+* Demo menu
 
+## Demo menu
+You can read its source code to understand how framework works
+To run it, just add `client_script @warmenu/warmenu_demo.lua` to any of your resources which are using WarMenu
 
 ## API
 ```lua
