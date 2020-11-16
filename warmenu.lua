@@ -298,6 +298,7 @@ end
 function WarMenu.IsMenuOpened(id)
 	return currentMenu and currentMenu.id == id
 end
+WarMenu.Begin = WarMenu.IsMenuOpened
 
 function WarMenu.IsAnyMenuOpened()
 	return currentMenu ~= nil

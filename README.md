@@ -27,7 +27,7 @@ WarMenu.CreateSubMenu(id, parent, subTitle*, style*)
 WarMenu.CurrentMenu() -- id
 
 WarMenu.OpenMenu(id)
-WarMenu.IsMenuOpened(id)
+WarMenu.Begin(id)
 WarMenu.IsAnyMenuOpened()
 WarMenu.IsMenuAboutToBeClosed() -- return true if current menu will be closed in next frame
 WarMenu.CloseMenu()

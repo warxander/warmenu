@@ -53,16 +53,16 @@ else
 		WarMenu.OpenMenu('demo')
 
 		while true do
-			if WarMenu.IsMenuOpened('demo') then
+			if WarMenu.Begin('demo') then
 				WarMenu.MenuButton('Menu', 'demo_menu')
 				WarMenu.MenuButton('Controls', 'demo_controls')
 				WarMenu.MenuButton('Style', 'demo_style')
 				WarMenu.MenuButton('Exit', 'demo_exit')
 
 				WarMenu.End()
-			elseif WarMenu.IsMenuOpened('demo_menu') then
+			elseif WarMenu.Begin('demo_menu') then
 				WarMenu.End()
-			elseif WarMenu.IsMenuOpened('demo_controls') then
+			elseif WarMenu.Begin('demo_controls') then
 				WarMenu.Button('Button', 'Subtext')
 
 				local pressed, inputText = WarMenu.InputButton('Input Button', nil, _inputText)
@@ -96,9 +96,9 @@ else
 				end
 
 				WarMenu.End()
-			elseif WarMenu.IsMenuOpened('demo_style') then
+			elseif WarMenu.Begin('demo_style') then
 				WarMenu.End()
-			elseif WarMenu.IsMenuOpened('demo_exit') then
+			elseif WarMenu.Begin('demo_exit') then
 				WarMenu.MenuButton('No', 'demo')
 
 				if WarMenu.Button('~r~Yes') then
