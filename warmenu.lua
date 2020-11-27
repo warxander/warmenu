@@ -190,8 +190,10 @@ local function drawTitle()
 		drawRect(x, y, getStyleProperty('width'), titleHeight, getStyleProperty('titleBackgroundColor'))
 	end
 
-	setTextParams(titleFont, getStyleProperty('titleColor'), titleScale, true)
-	drawText(currentMenu.title, x, y - titleHeight / 2 + titleYOffset)
+	if currentMenu.title then
+		setTextParams(titleFont, getStyleProperty('titleColor'), titleScale, true)
+		drawText(currentMenu.title, x, y - titleHeight / 2 + titleYOffset)
+	end
 end
 
 local function drawSubTitle()
