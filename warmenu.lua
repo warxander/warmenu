@@ -70,17 +70,26 @@ local function setStyleProperty(id, property, value)
 	end
 
 	local menu = menus[id]
+
 	if menu then
-		if not menu.style then
-			menu.style = { }
+		if not menu.overrideStyle then
+			menu.overrideStyle = { }
 		end
 
-		menu.style[property] = value
+		menu.overrideStyle[property] = value
 	end
 end
 
 local function getStyleProperty(property, menu)
 	menu = menu or currentMenu
+
+	if menu.overrideStyle then
+		local value = menu.overrideStyle[property]
+		if value then
+			return value
+		end
+	end
+
 	return menu.style and menu.style[property] or defaultStyle[property]
 end
 
@@ -95,10 +104,6 @@ local function copyTable(t)
 	end
 
 	return result
-end
-
-local function copyStyle(menu)
-	return copyTable(menu.style)
 end
 
 local function setMenuVisible(id, visible, holdCurrentOption)
@@ -279,10 +284,14 @@ function WarMenu.CreateSubMenu(id, parent, subTitle, style)
 
 	menu.previousMenu = parent
 
+	if parentMenu.overrideStyle then
+		menu.overrideStyle = copyTable(parentMenu.overrideStyle)
+	end
+
 	if style then
 		menu.style = style
 	elseif parentMenu.style then
-		menu.style = copyStyle(parentMenu)
+		menu.style = copyTable(parentMenu.style)
 	end
 end
 
