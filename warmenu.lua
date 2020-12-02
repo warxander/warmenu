@@ -282,7 +282,7 @@ function WarMenu.CreateSubMenu(id, parent, subTitle, style)
 	if style then
 		menu.style = style
 	elseif parentMenu.style then
-		menu.style = copyStyle(parentMenu.style)
+		menu.style = copyStyle(parentMenu)
 	end
 end
 
