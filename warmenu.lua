@@ -160,13 +160,13 @@ local function setTextParams(font, color, scale, center, shadow, alignRight, wra
 end
 
 local function getLinesCount(text, x, y)
-	BeginTextCommandLineCount('STRING')
+	BeginTextCommandLineCount('TWOSTRINGS')
 	AddTextComponentString(tostring(text))
 	return EndTextCommandGetLineCount(x, y)
 end
 
 local function drawText(text, x, y)
-	BeginTextCommandDisplayText('STRING')
+	BeginTextCommandDisplayText('TWOSTRINGS')
 	AddTextComponentString(tostring(text))
 	EndTextCommandDisplayText(x, y)
 end
