@@ -53,6 +53,12 @@ local defaultStyle = {
 	buttonPressedSound = { name = 'SELECT', set = 'HUD_FRONTEND_DEFAULT_SOUNDSET' }, --https://pastebin.com/0neZdsZ5
 }
 
+local lastScroll = {}
+
+for _, key in pairs({ keys.up, keys.down, keys.left, keys.right }) do
+	lastScroll[key] = GetGameTimer()
+end
+
 local function setMenuProperty(id, property, value)
 	if not id then
 		return
@@ -524,27 +530,43 @@ function WarMenu.Display()
 			drawSubTitle()
 
 			currentKey = nil
+			local current_time = GetGameTimer()
 
-			if IsDisabledControlJustReleased(0, keys.down) then
-				PlaySoundFrontend(-1, 'NAV_UP_DOWN', 'HUD_FRONTEND_DEFAULT_SOUNDSET', true)
+			if IsDisabledControlPressed(0, keys.down) then
+				if (current_time - lastScroll[keys.down]) > 125 then
+					PlaySoundFrontend(-1, 'NAV_UP_DOWN', 'HUD_FRONTEND_DEFAULT_SOUNDSET', true)
 
-				if currentMenu.currentOption < optionCount then
-					currentMenu.currentOption = currentMenu.currentOption + 1
-				else
-					currentMenu.currentOption = 1
+					if currentMenu.currentOption < optionCount then
+						currentMenu.currentOption = currentMenu.currentOption + 1
+					else
+						currentMenu.currentOption = 1
+					end
+
+					lastScroll[keys.down] = current_time
 				end
-			elseif IsDisabledControlJustReleased(0, keys.up) then
-				PlaySoundFrontend(-1, 'NAV_UP_DOWN', 'HUD_FRONTEND_DEFAULT_SOUNDSET', true)
+			elseif IsDisabledControlPressed(0, keys.up) then
+				if (current_time - lastScroll[keys.up]) > 125 then
 
-				if currentMenu.currentOption > 1 then
-					currentMenu.currentOption = currentMenu.currentOption - 1
-				else
-					currentMenu.currentOption = optionCount
+					PlaySoundFrontend(-1, 'NAV_UP_DOWN', 'HUD_FRONTEND_DEFAULT_SOUNDSET', true)
+
+					if currentMenu.currentOption > 1 then
+						currentMenu.currentOption = currentMenu.currentOption - 1
+					else
+						currentMenu.currentOption = optionCount
+					end
+
+					lastScroll[keys.up] = current_time
 				end
-			elseif IsDisabledControlJustReleased(0, keys.left) then
-				currentKey = keys.left
-			elseif IsDisabledControlJustReleased(0, keys.right) then
-				currentKey = keys.right
+			elseif IsDisabledControlPressed(0, keys.left) then
+				if (current_time - lastScroll[keys.left]) > 125 then
+					currentKey = keys.left
+					lastScroll[keys.left] = current_time
+				end
+			elseif IsDisabledControlPressed(0, keys.right) then
+				if (current_time - lastScroll[keys.right]) > 125 then
+					currentKey = keys.right
+					lastScroll[keys.right] = current_time
+				end
 			elseif IsControlJustReleased(0, keys.select) then
 				currentKey = keys.select
 			elseif IsDisabledControlJustReleased(0, keys.back) then
