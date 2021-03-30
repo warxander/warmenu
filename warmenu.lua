@@ -53,10 +53,10 @@ local defaultStyle = {
 	buttonPressedSound = { name = 'SELECT', set = 'HUD_FRONTEND_DEFAULT_SOUNDSET' }, --https://pastebin.com/0neZdsZ5
 }
 
-local lastScroll = {}
+local lastScrollTimes = {}
 
 for _, key in pairs({ keys.up, keys.down, keys.left, keys.right }) do
-	lastScroll[key] = GetGameTimer()
+	lastScrollTimes[key] = GetGameTimer()
 end
 
 local function setMenuProperty(id, property, value)
@@ -533,7 +533,7 @@ function WarMenu.Display()
 			local currentTime = GetGameTimer()
 
 			if IsDisabledControlPressed(0, keys.down) then
-				if (currentTime - lastScroll[keys.down]) > 125 then
+				if (currentTime - lastScrollTimes[keys.down]) > 125 then
 					PlaySoundFrontend(-1, 'NAV_UP_DOWN', 'HUD_FRONTEND_DEFAULT_SOUNDSET', true)
 
 					if currentMenu.currentOption < optionCount then
@@ -542,10 +542,10 @@ function WarMenu.Display()
 						currentMenu.currentOption = 1
 					end
 
-					lastScroll[keys.down] = currentTime
+					lastScrollTimes[keys.down] = currentTime
 				end
 			elseif IsDisabledControlPressed(0, keys.up) then
-				if (currentTime - lastScroll[keys.up]) > 125 then
+				if (currentTime - lastScrollTimes[keys.up]) > 125 then
 
 					PlaySoundFrontend(-1, 'NAV_UP_DOWN', 'HUD_FRONTEND_DEFAULT_SOUNDSET', true)
 
@@ -555,17 +555,17 @@ function WarMenu.Display()
 						currentMenu.currentOption = optionCount
 					end
 
-					lastScroll[keys.up] = currentTime
+					lastScrollTimes[keys.up] = currentTime
 				end
 			elseif IsDisabledControlPressed(0, keys.left) then
-				if (currentTime - lastScroll[keys.left]) > 125 then
+				if (currentTime - lastScrollTimes[keys.left]) > 125 then
 					currentKey = keys.left
-					lastScroll[keys.left] = currentTime
+					lastScrollTimes[keys.left] = currentTime
 				end
 			elseif IsDisabledControlPressed(0, keys.right) then
-				if (currentTime - lastScroll[keys.right]) > 125 then
+				if (currentTime - lastScrollTimes[keys.right]) > 125 then
 					currentKey = keys.right
-					lastScroll[keys.right] = currentTime
+					lastScrollTimes[keys.right] = currentTime
 				end
 			elseif IsControlJustReleased(0, keys.select) then
 				currentKey = keys.select
