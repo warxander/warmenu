@@ -530,10 +530,10 @@ function WarMenu.Display()
 			drawSubTitle()
 
 			currentKey = nil
-			local current_time = GetGameTimer()
+			local currentTime = GetGameTimer()
 
 			if IsDisabledControlPressed(0, keys.down) then
-				if (current_time - lastScroll[keys.down]) > 125 then
+				if (currentTime - lastScroll[keys.down]) > 125 then
 					PlaySoundFrontend(-1, 'NAV_UP_DOWN', 'HUD_FRONTEND_DEFAULT_SOUNDSET', true)
 
 					if currentMenu.currentOption < optionCount then
@@ -542,10 +542,10 @@ function WarMenu.Display()
 						currentMenu.currentOption = 1
 					end
 
-					lastScroll[keys.down] = current_time
+					lastScroll[keys.down] = currentTime
 				end
 			elseif IsDisabledControlPressed(0, keys.up) then
-				if (current_time - lastScroll[keys.up]) > 125 then
+				if (currentTime - lastScroll[keys.up]) > 125 then
 
 					PlaySoundFrontend(-1, 'NAV_UP_DOWN', 'HUD_FRONTEND_DEFAULT_SOUNDSET', true)
 
@@ -555,17 +555,17 @@ function WarMenu.Display()
 						currentMenu.currentOption = optionCount
 					end
 
-					lastScroll[keys.up] = current_time
+					lastScroll[keys.up] = currentTime
 				end
 			elseif IsDisabledControlPressed(0, keys.left) then
-				if (current_time - lastScroll[keys.left]) > 125 then
+				if (currentTime - lastScroll[keys.left]) > 125 then
 					currentKey = keys.left
-					lastScroll[keys.left] = current_time
+					lastScroll[keys.left] = currentTime
 				end
 			elseif IsDisabledControlPressed(0, keys.right) then
-				if (current_time - lastScroll[keys.right]) > 125 then
+				if (currentTime - lastScroll[keys.right]) > 125 then
 					currentKey = keys.right
-					lastScroll[keys.right] = current_time
+					lastScroll[keys.right] = currentTime
 				end
 			elseif IsControlJustReleased(0, keys.select) then
 				currentKey = keys.select
