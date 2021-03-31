@@ -59,6 +59,8 @@ for _, key in pairs({ keys.up, keys.down, keys.left, keys.right }) do
 	lastScrollTimes[key] = GetGameTimer()
 end
 
+local scrollInterval = 125
+
 local function setMenuProperty(id, property, value)
 	if not id then
 		return
@@ -533,7 +535,7 @@ function WarMenu.Display()
 			local currentTime = GetGameTimer()
 
 			if IsDisabledControlPressed(0, keys.down) then
-				if (currentTime - lastScrollTimes[keys.down]) > 125 then
+				if (currentTime - lastScrollTimes[keys.down]) > scrollInterval then
 					PlaySoundFrontend(-1, 'NAV_UP_DOWN', 'HUD_FRONTEND_DEFAULT_SOUNDSET', true)
 
 					if currentMenu.currentOption < optionCount then
@@ -545,7 +547,7 @@ function WarMenu.Display()
 					lastScrollTimes[keys.down] = currentTime
 				end
 			elseif IsDisabledControlPressed(0, keys.up) then
-				if (currentTime - lastScrollTimes[keys.up]) > 125 then
+				if (currentTime - lastScrollTimes[keys.up]) > scrollInterval then
 
 					PlaySoundFrontend(-1, 'NAV_UP_DOWN', 'HUD_FRONTEND_DEFAULT_SOUNDSET', true)
 
@@ -558,12 +560,12 @@ function WarMenu.Display()
 					lastScrollTimes[keys.up] = currentTime
 				end
 			elseif IsDisabledControlPressed(0, keys.left) then
-				if (currentTime - lastScrollTimes[keys.left]) > 125 then
+				if (currentTime - lastScrollTimes[keys.left]) > scrollInterval then
 					currentKey = keys.left
 					lastScrollTimes[keys.left] = currentTime
 				end
 			elseif IsDisabledControlPressed(0, keys.right) then
-				if (currentTime - lastScrollTimes[keys.right]) > 125 then
+				if (currentTime - lastScrollTimes[keys.right]) > scrollInterval then
 					currentKey = keys.right
 					lastScrollTimes[keys.right] = currentTime
 				end
