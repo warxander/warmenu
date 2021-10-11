@@ -259,7 +259,6 @@ function WarMenu.CreateMenu(id, title, subTitle, style)
 	-- Members
 	menu.id = id
 	menu.previousMenu = nil
-	menu.aboutToBeClosed = false
 	menu.currentOption = 1
 	menu.title = title
 	menu.subTitle = subTitle and string.upper(subTitle) or 'INTERACTION MENU'
@@ -316,22 +315,15 @@ function WarMenu.IsAnyMenuOpened()
 end
 
 function WarMenu.IsMenuAboutToBeClosed()
-	return currentMenu and currentMenu.aboutToBeClosed
+	return false
 end
 
 function WarMenu.CloseMenu()
-	if not currentMenu then
-		return
-	end
-
-	if currentMenu.aboutToBeClosed then
-		currentMenu.aboutToBeClosed = false
+	if currentMenu then
 		setMenuVisible(currentMenu.id, false)
 		optionCount = 0
 		currentKey = nil
 		PlaySoundFrontend(-1, 'QUIT', 'HUD_FRONTEND_DEFAULT_SOUNDSET', true)
-	else
-		currentMenu.aboutToBeClosed = true
 	end
 end
 
@@ -515,49 +507,45 @@ function WarMenu.Display()
 		DisableControlAction(0, keys.right, true)
 		DisableControlAction(0, keys.back, true)
 
-		if currentMenu.aboutToBeClosed then
-			WarMenu.CloseMenu()
-		else
-			ClearAllHelpMessages()
+		ClearAllHelpMessages()
 
-			drawTitle()
-			drawSubTitle()
+		drawTitle()
+		drawSubTitle()
 
-			currentKey = nil
+		currentKey = nil
 
-			if IsDisabledControlJustReleased(0, keys.down) then
-				PlaySoundFrontend(-1, 'NAV_UP_DOWN', 'HUD_FRONTEND_DEFAULT_SOUNDSET', true)
+		if IsDisabledControlJustReleased(0, keys.down) then
+			PlaySoundFrontend(-1, 'NAV_UP_DOWN', 'HUD_FRONTEND_DEFAULT_SOUNDSET', true)
 
-				if currentMenu.currentOption < optionCount then
-					currentMenu.currentOption = currentMenu.currentOption + 1
-				else
-					currentMenu.currentOption = 1
-				end
-			elseif IsDisabledControlJustReleased(0, keys.up) then
-				PlaySoundFrontend(-1, 'NAV_UP_DOWN', 'HUD_FRONTEND_DEFAULT_SOUNDSET', true)
-
-				if currentMenu.currentOption > 1 then
-					currentMenu.currentOption = currentMenu.currentOption - 1
-				else
-					currentMenu.currentOption = optionCount
-				end
-			elseif IsDisabledControlJustReleased(0, keys.left) then
-				currentKey = keys.left
-			elseif IsDisabledControlJustReleased(0, keys.right) then
-				currentKey = keys.right
-			elseif IsControlJustReleased(0, keys.select) then
-				currentKey = keys.select
-			elseif IsDisabledControlJustReleased(0, keys.back) then
-				if menus[currentMenu.previousMenu] then
-					setMenuVisible(currentMenu.previousMenu, true)
-					PlaySoundFrontend(-1, 'BACK', 'HUD_FRONTEND_DEFAULT_SOUNDSET', true)
-				else
-					WarMenu.CloseMenu()
-				end
+			if currentMenu.currentOption < optionCount then
+				currentMenu.currentOption = currentMenu.currentOption + 1
+			else
+				currentMenu.currentOption = 1
 			end
+		elseif IsDisabledControlJustReleased(0, keys.up) then
+			PlaySoundFrontend(-1, 'NAV_UP_DOWN', 'HUD_FRONTEND_DEFAULT_SOUNDSET', true)
 
-			optionCount = 0
+			if currentMenu.currentOption > 1 then
+				currentMenu.currentOption = currentMenu.currentOption - 1
+			else
+				currentMenu.currentOption = optionCount
+			end
+		elseif IsDisabledControlJustReleased(0, keys.left) then
+			currentKey = keys.left
+		elseif IsDisabledControlJustReleased(0, keys.right) then
+			currentKey = keys.right
+		elseif IsControlJustReleased(0, keys.select) then
+			currentKey = keys.select
+		elseif IsDisabledControlJustReleased(0, keys.back) then
+			if menus[currentMenu.previousMenu] then
+				setMenuVisible(currentMenu.previousMenu, true)
+				PlaySoundFrontend(-1, 'BACK', 'HUD_FRONTEND_DEFAULT_SOUNDSET', true)
+			else
+				WarMenu.CloseMenu()
+			end
 		end
+
+		optionCount = 0
 	end
 end
 WarMenu.End = WarMenu.Display

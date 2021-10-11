@@ -29,7 +29,7 @@ WarMenu.CurrentMenu() -- id
 WarMenu.OpenMenu(id)
 WarMenu.Begin(id)
 WarMenu.IsAnyMenuOpened()
-WarMenu.IsMenuAboutToBeClosed() -- return true if current menu will be closed in next frame
+WarMenu.IsMenuAboutToBeClosed() -- DEPRECATED: always return false
 WarMenu.CloseMenu()
 
 -- Controls
