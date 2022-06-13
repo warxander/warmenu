@@ -411,7 +411,12 @@ function WarMenu.InputButton(text, windowTitleEntry, defaultText, maxLength, sub
 	local inputText = nil
 
 	if pressed then
-		DisplayOnscreenKeyboard(1, windowTitleEntry or 'FMMC_MPM_NA', '', defaultText or '', '', '', '', maxLength or 255)
+		if windowTitleEntry == nil then
+			windowTitleEntry = ''
+		end
+
+		AddTextEntry('FMMC_MPM_NA', windowTitleEntry)
+		DisplayOnscreenKeyboard(1, 'FMMC_MPM_NA', '', defaultText or '', '', '', '', maxLength or 255)
 
 		while true do
 			DisableAllControlActions(0)
