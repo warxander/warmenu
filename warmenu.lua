@@ -40,6 +40,7 @@ local defaultStyle = {
 	y = 0.025,
 	width = 0.23,
 	maxOptionCountOnScreen = 10,
+	titleVisible = true,
 	titleColor = { 0, 0, 0, 255 },
 	titleBackgroundColor = { 245, 127, 23, 255 },
 	titleBackgroundSprite = nil,
@@ -85,12 +86,16 @@ local function getStyleProperty(property, menu)
 
 	if menu.overrideStyle then
 		local value = menu.overrideStyle[property]
-		if value then
+		if value ~= nil then
 			return value
 		end
 	end
 
 	return menu.style and menu.style[property] or defaultStyle[property]
+end
+
+local function getTitleHeight()
+	return getStyleProperty('titleVisible') and titleHeight or 0
 end
 
 local function copyTable(t)
@@ -186,6 +191,10 @@ local function getCurrentIndex()
 end
 
 local function drawTitle()
+	if not getStyleProperty('titleVisible') then
+		return
+	end
+
 	local x = getStyleProperty('x') + getStyleProperty('width') / 2
 	local y = getStyleProperty('y') + titleHeight / 2
 
@@ -203,7 +212,7 @@ end
 
 local function drawSubTitle()
 	local x = getStyleProperty('x') + getStyleProperty('width') / 2
-	local y = getStyleProperty('y') + titleHeight + buttonHeight / 2
+	local y = getStyleProperty('y') + getTitleHeight() + buttonHeight / 2
 
 	drawRect(x, y, getStyleProperty('width'), buttonHeight, getStyleProperty('subTitleBackgroundColor'))
 
@@ -239,7 +248,7 @@ local function drawButton(text, subText)
 	end
 
 	local x = getStyleProperty('x') + getStyleProperty('width') / 2
-	local y = getStyleProperty('y') + titleHeight + buttonHeight + (buttonHeight * currentIndex) - buttonHeight / 2
+	local y = getStyleProperty('y') + getTitleHeight() + buttonHeight + (buttonHeight * currentIndex) - buttonHeight / 2
 
 	drawRect(x, y, getStyleProperty('width'), buttonHeight, backgroundColor)
 
@@ -351,7 +360,7 @@ function WarMenu.ToolTip(text, width, flipHorizontal)
 	local linesCount = getLinesCount(text, textX, getStyleProperty('y'))
 
 	local height = GetTextScaleHeight(buttonScale, buttonFont) * (linesCount + 1) + buttonTextYOffset
-	local y = getStyleProperty('y') + titleHeight + (buttonHeight * currentIndex) + height / 2
+	local y = getStyleProperty('y') + getTitleHeight() + (buttonHeight * currentIndex) + height / 2
 
 	drawRect(x, y, width, height, getStyleProperty('backgroundColor'))
 
@@ -397,7 +406,7 @@ function WarMenu.SpriteButton(text, dict, name, r, g, b, a)
 	if not HasStreamedTextureDictLoaded(dict) then
 		RequestStreamedTextureDict(dict)
 	end
-	DrawSprite(dict, name, getStyleProperty('x') + getStyleProperty('width') - spriteWidth / 2 - buttonSpriteXOffset, getStyleProperty('y') + titleHeight + buttonHeight + (buttonHeight * currentIndex) - spriteHeight / 2 + buttonSpriteYOffset, spriteWidth, spriteHeight, 0., r or 255, g or 255, b or 255, a or 255)
+	DrawSprite(dict, name, getStyleProperty('x') + getStyleProperty('width') - spriteWidth / 2 - buttonSpriteXOffset, getStyleProperty('y') + getTitleHeight() + buttonHeight + (buttonHeight * currentIndex) - spriteHeight / 2 + buttonSpriteYOffset, spriteWidth, spriteHeight, 0., r or 255, g or 255, b or 255, a or 255)
 
 	return pressed
 end
@@ -582,6 +591,10 @@ WarMenu.SetMenuSubTitle = WarMenu.SetSubTitle
 
 function WarMenu.SetMenuStyle(id, style)
 	setMenuProperty(id, 'style', style)
+end
+
+function WarMenu.SetMenuTitleVisible(id, visible)
+	setStyleProperty(id, 'titleVisible', visible)
 end
 
 function WarMenu.SetMenuX(id, x)
