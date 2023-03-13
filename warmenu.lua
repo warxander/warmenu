@@ -609,6 +609,10 @@ function WarMenu.SetMenuSubTitleColor(id, r, g, b, a)
 	setStyleProperty(id, 'subTitleColor', { r, g, b, a })
 end
 
+function WarMenu.SetMenuSubTitleBackgroundColor(id, r, g, b, a)
+	setStyleProperty(id, 'subTitleBackgroundColor', { r, g, b, a })
+end
+
 function WarMenu.SetTitleBackgroundColor(id, r, g, b, a)
 	setStyleProperty(id, 'titleBackgroundColor', { r, g, b, a })
 end
