@@ -310,7 +310,7 @@ end
 function WarMenu.OpenMenu(id)
 	if id and menus[id] then
 		PlaySoundFrontend(-1, 'SELECT', 'HUD_FRONTEND_DEFAULT_SOUNDSET', true)
-		setMenuVisible(id, true)
+		setMenuVisible(id, true, true)
 	end
 end
 
