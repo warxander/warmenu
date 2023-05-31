@@ -511,6 +511,7 @@ end
 function WarMenu.Display()
 	if currentMenu then
 		ClearAllHelpMessages()
+		HudWeaponWheelIgnoreSelection()
 
 		drawTitle()
 		drawSubTitle()
