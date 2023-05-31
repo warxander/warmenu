@@ -528,7 +528,7 @@ function WarMenu.Display()
 	if currentMenu then
 		ClearAllHelpMessages()
 		HudWeaponWheelIgnoreSelection()
-		DisablePlayerFiring(PlayerId(), true)
+		HudWeaponWheelIgnoreControlInput(true)
 
 		drawTitle()
 		drawSubTitle()
