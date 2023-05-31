@@ -11,7 +11,7 @@ end
 ---
 
 local menus = { }
-local keys = { down = 187, scrollDown = 242, up = 188, scrollUp = 241, left = 189, right = 190, select = 191, back = 194 }
+local keys = { down = 187, scrollDown = 242, up = 188, scrollUp = 241, left = 189, right = 190, select = 191, accept = 237, back = 194, cancel = 238 }
 local optionCount = 0
 
 local currentKey = nil
@@ -60,6 +60,14 @@ end
 
 local function IsNavigatedUp()
 	return IsControlJustReleased(2, keys.up) or IsControlJustReleased(2, keys.scrollUp)
+end
+
+local function IsSelectedPressed()
+	return IsControlJustReleased(2, keys.select) or IsControlJustReleased(2, keys.accept)
+end
+
+local function IsBackPressed()
+	return IsControlJustReleased(2, keys.back) or IsControlJustReleased(2, keys.cancel)
 end
 
 local function setMenuProperty(id, property, value)
@@ -520,6 +528,7 @@ function WarMenu.Display()
 	if currentMenu then
 		ClearAllHelpMessages()
 		HudWeaponWheelIgnoreSelection()
+		DisablePlayerFiring(PlayerId(), true)
 
 		drawTitle()
 		drawSubTitle()
@@ -546,9 +555,9 @@ function WarMenu.Display()
 			currentKey = keys.left
 		elseif IsControlJustReleased(2, keys.right) then
 			currentKey = keys.right
-		elseif IsControlJustReleased(2, keys.select) then
+		elseif IsSelectedPressed() then
 			currentKey = keys.select
-		elseif IsControlJustReleased(2, keys.back) then
+		elseif IsBackPressed() then
 			if menus[currentMenu.previousMenu] then
 				setMenuVisible(currentMenu.previousMenu, true)
 				PlaySoundFrontend(-1, 'BACK', 'HUD_FRONTEND_DEFAULT_SOUNDSET', true)
