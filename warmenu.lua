@@ -11,7 +11,7 @@ end
 ---
 
 local menus = { }
-local keys = { down = 187, up = 188, left = 189, right = 190, select = 191, back = 194 }
+local keys = { down = 187, scrollDown = 242, up = 188, scrollUp = 241, left = 189, right = 190, select = 191, back = 194 }
 local optionCount = 0
 
 local currentKey = nil
@@ -53,6 +53,14 @@ local defaultStyle = {
 	subTitleBackgroundColor = { 0, 0, 0, 255 },
 	buttonPressedSound = { name = 'SELECT', set = 'HUD_FRONTEND_DEFAULT_SOUNDSET' }, --https://pastebin.com/0neZdsZ5
 }
+
+local function IsNavigatedDown()
+	return IsControlJustReleased(2, keys.down) or IsControlJustReleased(2, keys.scrollDown)
+end
+
+local function IsNavigatedUp()
+	return IsControlJustReleased(2, keys.up) or IsControlJustReleased(2, keys.scrollUp)
+end
 
 local function setMenuProperty(id, property, value)
 	if not id then
@@ -518,7 +526,7 @@ function WarMenu.Display()
 
 		currentKey = nil
 
-		if IsControlJustReleased(2, keys.down) then
+		if IsNavigatedDown() then
 			PlaySoundFrontend(-1, 'NAV_UP_DOWN', 'HUD_FRONTEND_DEFAULT_SOUNDSET', true)
 
 			if currentMenu.currentOption < optionCount then
@@ -526,7 +534,7 @@ function WarMenu.Display()
 			else
 				currentMenu.currentOption = 1
 			end
-		elseif IsControlJustReleased(2, keys.up) then
+		elseif IsNavigatedUp() then
 			PlaySoundFrontend(-1, 'NAV_UP_DOWN', 'HUD_FRONTEND_DEFAULT_SOUNDSET', true)
 
 			if currentMenu.currentOption > 1 then
