@@ -15,7 +15,7 @@ Inspired by [Dear ImGui](https://github.com/ocornut/imgui) and GTA V menu system
 * Demo menu
 
 ## Demo menu
-You can read its source code to understand how framework works   
+You can read its source code to understand how framework works
 To run it, just add `client_script @warmenu/warmenu_demo.lua` to any of your resources which are using WarMenu
 
 ## API
@@ -63,9 +63,11 @@ WarMenu.SetMenuX(id, x) -- [0.0..1.0] top left corner
 WarMenu.SetMenuY(id, y) -- [0.0..1.0] top
 WarMenu.SetMenuWidth(id, width) -- [0.0..1.0]
 WarMenu.SetMenuMaxOptionCountOnScreen(id, count) -- 10 by default
+WarMenu.SetMenuTitleVisible(id, visible) -- true by default
 
 WarMenu.SetMenuTitleColor(id, r, g, b, a*)
 WarMenu.SetMenuSubTitleColor(id, r, g, b, a*)
+WarMenu.SetMenuSubTitleBackgroundColor(id, r, g, b, a*)
 
 WarMenu.SetMenuTitleBackgroundColor(id, r, g, b, a*)
 -- or
@@ -81,6 +83,11 @@ WarMenu.SetMenuButtonPressedSound(id, name, set) -- https://pastebin.com/0neZdsZ
 
 
 ## Changelog
+### 1.6
+* Added full mouse input support (mouse scroll to navigate, mouse buttons to select/back)
+* Added WarMenu.SetMenuTitleVisible API
+* Added WarMenu.SetMenuSubTitleBackgroundColor API
+* Fixed controls input group
 ### 1.5
 * Added styles support
 * Added `WarMenu.SetMenuStyle` API
