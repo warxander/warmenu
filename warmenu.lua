@@ -152,7 +152,13 @@ local function setMenuVisible(id, visible, holdCurrentOption)
 		end
 
 		currentMenu = menu
+
+		SetUserRadioControlEnabled(false)
+		HudWeaponWheelIgnoreControlInput(true)
 	else
+		HudWeaponWheelIgnoreControlInput(false)
+		SetUserRadioControlEnabled(true)
+
 		currentMenu = nil
 	end
 end
@@ -530,6 +536,7 @@ function WarMenu.Display()
 			ClearAllHelpMessages()
 			HudWeaponWheelIgnoreSelection()
 			DisablePlayerFiring(PlayerId(), true)
+			DisableAimCamThisUpdate()
 
 			drawTitle()
 			drawSubTitle()
