@@ -534,7 +534,6 @@ function WarMenu.Display()
 	if currentMenu then
 		if not IsPauseMenuActive() then
 			ClearAllHelpMessages()
-			HudWeaponWheelIgnoreSelection()
 			DisablePlayerFiring(PlayerId(), true)
 			DisableAimCamThisUpdate()
 
