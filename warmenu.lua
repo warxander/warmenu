@@ -12,6 +12,8 @@ end
 
 local menus = { }
 local keys = { down = 187, scrollDown = 242, up = 188, scrollUp = 241, left = 189, right = 190, select = 191, accept = 237, back = 194, cancel = 238 }
+
+local skipInputNextFrame = true
 local optionCount = 0
 
 local currentKey = nil
@@ -152,6 +154,7 @@ local function setMenuVisible(id, visible, holdCurrentOption)
 		end
 
 		currentMenu = menu
+		skipInputNextFrame = true
 
 		SetUserRadioControlEnabled(false)
 		HudWeaponWheelIgnoreControlInput(true)
@@ -542,34 +545,38 @@ function WarMenu.Display()
 
 			currentKey = nil
 
-			if IsNavigatedDown() then
-				PlaySoundFrontend(-1, 'NAV_UP_DOWN', 'HUD_FRONTEND_DEFAULT_SOUNDSET', true)
+			if skipInputNextFrame then
+				skipInputNextFrame = false
+			else
+				if IsNavigatedDown() then
+					PlaySoundFrontend(-1, 'NAV_UP_DOWN', 'HUD_FRONTEND_DEFAULT_SOUNDSET', true)
 
-				if currentMenu.currentOption < optionCount then
-					currentMenu.currentOption = currentMenu.currentOption + 1
-				else
-					currentMenu.currentOption = 1
-				end
-			elseif IsNavigatedUp() then
-				PlaySoundFrontend(-1, 'NAV_UP_DOWN', 'HUD_FRONTEND_DEFAULT_SOUNDSET', true)
+					if currentMenu.currentOption < optionCount then
+						currentMenu.currentOption = currentMenu.currentOption + 1
+					else
+						currentMenu.currentOption = 1
+					end
+				elseif IsNavigatedUp() then
+					PlaySoundFrontend(-1, 'NAV_UP_DOWN', 'HUD_FRONTEND_DEFAULT_SOUNDSET', true)
 
-				if currentMenu.currentOption > 1 then
-					currentMenu.currentOption = currentMenu.currentOption - 1
-				else
-					currentMenu.currentOption = optionCount
-				end
-			elseif IsControlJustReleased(2, keys.left) then
-				currentKey = keys.left
-			elseif IsControlJustReleased(2, keys.right) then
-				currentKey = keys.right
-			elseif IsSelectedPressed() then
-				currentKey = keys.select
-			elseif IsBackPressed() then
-				if menus[currentMenu.previousMenu] then
-					setMenuVisible(currentMenu.previousMenu, true)
-					PlaySoundFrontend(-1, 'BACK', 'HUD_FRONTEND_DEFAULT_SOUNDSET', true)
-				else
-					WarMenu.CloseMenu()
+					if currentMenu.currentOption > 1 then
+						currentMenu.currentOption = currentMenu.currentOption - 1
+					else
+						currentMenu.currentOption = optionCount
+					end
+				elseif IsControlJustReleased(2, keys.left) then
+					currentKey = keys.left
+				elseif IsControlJustReleased(2, keys.right) then
+					currentKey = keys.right
+				elseif IsSelectedPressed() then
+					currentKey = keys.select
+				elseif IsBackPressed() then
+					if menus[currentMenu.previousMenu] then
+						setMenuVisible(currentMenu.previousMenu, true)
+						PlaySoundFrontend(-1, 'BACK', 'HUD_FRONTEND_DEFAULT_SOUNDSET', true)
+					else
+						WarMenu.CloseMenu()
+					end
 				end
 			end
 		end
