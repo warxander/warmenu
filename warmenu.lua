@@ -539,7 +539,7 @@ function WarMenu.Display()
 			ClearAllHelpMessages()
 			HudWeaponWheelIgnoreSelection()
 			DisablePlayerFiring(PlayerId(), true)
-			DisableAimCamThisUpdate()
+			DisableControlAction(0, 25, true)
 
 			drawTitle()
 			drawSubTitle()
