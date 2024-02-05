@@ -2,7 +2,9 @@ fx_version 'cerulean'
 game 'gta5'
 lua54 'yes'
 
-description 'FiveM Lua Menu Framework'
+author 'Warxander (https://github.com/warxander)'
+description 'FiveM Lua Menu framework'
+version '2.0.0'
 
 files {
 	'warmenu.lua',
