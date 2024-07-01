@@ -522,6 +522,7 @@ function WarMenu.CheckBox(text, checked)
 end
 
 function WarMenu.ComboBox(text, items, currentIndex, selectedIndex)
+	if not currentIndex then currentIndex = 1 end
 	if not currentMenu then
 		return
 	end
