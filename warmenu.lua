@@ -521,7 +521,7 @@ function WarMenu.CheckBox(text, checked)
 	return WarMenu.SpriteButton(text, 'commonmenu', name)
 end
 
-function WarMenu.ComboBox(text, items, currentIndex, selectedIndex)
+function WarMenu.ComboBox(text, items, currentIndex)
 	if not currentMenu then
 		return
 	end
@@ -529,7 +529,6 @@ function WarMenu.ComboBox(text, items, currentIndex, selectedIndex)
 	local itemsCount = #items
 	local selectedItem = items[currentIndex]
 	local isCurrent = currentMenu.optionIndex == currentOptionCount + 1
-	selectedIndex = selectedIndex or currentIndex
 
 	if itemsCount > 1 and isCurrent then
 		selectedItem = '← ' .. tostring(selectedItem) .. ' →'
@@ -537,9 +536,7 @@ function WarMenu.ComboBox(text, items, currentIndex, selectedIndex)
 
 	local pressed = WarMenu.Button(text, selectedItem)
 
-	if pressed then
-		selectedIndex = currentIndex
-	elseif isCurrent then
+	if not pressed and isCurrent then
 		if currentKey == keys.left then
 			if currentIndex > 1 then currentIndex = currentIndex - 1 else currentIndex = itemsCount end
 		elseif currentKey == keys.right then
